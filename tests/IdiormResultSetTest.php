@@ -1,5 +1,8 @@
 <?php
 
+use idiorm\orm\IdiormResultSet;
+use idiorm\orm\ORM;
+
 class IdiormResultSetTest extends PHPUnit_Framework_TestCase {
 
     public function setUp() {

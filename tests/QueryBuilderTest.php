@@ -1,5 +1,7 @@
 <?php
 
+use idiorm\orm\ORM;
+
 class QueryBuilderTest extends PHPUnit_Framework_TestCase {
 
     public function setUp() {

@@ -1,5 +1,7 @@
 <?php
 
+use idiorm\orm\ORM;
+
 class ConfigTest extends PHPUnit_Framework_TestCase {
 
     public function setUp() {

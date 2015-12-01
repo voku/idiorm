@@ -1,5 +1,8 @@
 <?php
 
+use idiorm\orm\IdiormMethodMissingException;
+use idiorm\orm\ORM;
+
 class ORMTest extends PHPUnit_Framework_TestCase {
 
     public function setUp() {
@@ -23,12 +26,12 @@ class ORMTest extends PHPUnit_Framework_TestCase {
 
     public function testForTable() {
         $result = ORM::for_table('test');
-        $this->assertInstanceOf('ORM', $result);
+        $this->assertInstanceOf('idiorm\orm\ORM', $result);
     }
 
     public function testCreate() {
         $model = ORM::for_table('test')->create();
-        $this->assertInstanceOf('ORM', $model);
+        $this->assertInstanceOf('idiorm\orm\ORM', $model);
         $this->assertTrue($model->is_new());
     }
 
@@ -60,7 +63,7 @@ class ORMTest extends PHPUnit_Framework_TestCase {
 
     public function testFindResultSet() {
         $result_set = ORM::for_table('test')->find_result_set();
-        $this->assertInstanceOf('IdiormResultSet', $result_set);
+        $this->assertInstanceOf('idiorm\orm\IdiormResultSet', $result_set);
         $this->assertSame(count($result_set), 5);
     }
 
@@ -68,7 +71,7 @@ class ORMTest extends PHPUnit_Framework_TestCase {
         ORM::configure('return_result_sets', true);
 
         $result_set = ORM::for_table('test')->find_many();
-        $this->assertInstanceOf('IdiormResultSet', $result_set);
+        $this->assertInstanceOf('idiorm\orm\IdiormResultSet', $result_set);
         $this->assertSame(count($result_set), 5);
         
         ORM::configure('return_result_sets', false);
@@ -85,7 +88,7 @@ class ORMTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException IdiormMethodMissingException
+     * @expectedException idiorm\orm\IdiormMethodMissingException
      */
     public function testInvalidORMFunctionCallShouldCreateException() {
         $orm = ORM::for_table('test');
@@ -93,7 +96,7 @@ class ORMTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException IdiormMethodMissingException
+     * @expectedException idiorm\orm\IdiormMethodMissingException
      */
     public function testInvalidResultsSetFunctionCallShouldCreateException() {
         $resultSet = ORM::for_table('test')->find_result_set();

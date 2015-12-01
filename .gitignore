@@ -1,4 +1,11 @@
 *.swp
 *.sqlite
 docs/_build
-/phpunit.phar
+nbproject/
+build/
+
+.idea
+
+# composer
+vendor
+composer.lock
