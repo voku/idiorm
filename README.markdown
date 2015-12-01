@@ -1,7 +1,9 @@
 Idiorm
 ======
 
-[![Build Status](https://travis-ci.org/voku/idiorm.png?branch=master)](https://travis-ci.org/voku/idiorm) [![Latest Stable Version](https://poser.pugx.org/voku/idiorm/v/stable.png)](https://packagist.org/packages/voku/idiorm) [![Total Downloads](https://poser.pugx.org/voku/idiorm/downloads.png)](https://packagist.org/packages/voku/idiorm) [![Code Climate](https://codeclimate.com/github/voku/idiorm/badges/gpa.svg)](https://codeclimate.com/github/voku/idiorm)
+[![Build Status](https://travis-ci.org/voku/idiorm.png?branch=master)](https://travis-ci.org/voku/idiorm) 
+[![Latest Stable Version](https://poser.pugx.org/voku/idiorm/v/stable.png)](https://packagist.org/packages/voku/idiorm) 
+[![Total Downloads](https://poser.pugx.org/voku/idiorm/downloads.png)](https://packagist.org/packages/voku/idiorm)
 
 [http://j4mie.github.com/idiormandparis/](http://j4mie.github.com/idiormandparis/)
 
