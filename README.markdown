@@ -1,9 +1,13 @@
 Idiorm
 ======
 
-[![Build Status](https://travis-ci.org/voku/idiorm.png?branch=master)](https://travis-ci.org/voku/idiorm) 
-[![Latest Stable Version](https://poser.pugx.org/voku/idiorm/v/stable.png)](https://packagist.org/packages/voku/idiorm) 
-[![Total Downloads](https://poser.pugx.org/voku/idiorm/downloads.png)](https://packagist.org/packages/voku/idiorm)
+[![Build Status](https://api.travis-ci.org/voku/idiorm.svg?branch=master)](https://travis-ci.org/voku/idiorm)
+[![Coverage Status](https://coveralls.io/repos/voku/idiorm/badge.svg?branch=master&service=github)](https://coveralls.io/github/voku/idiorm?branch=master)
+[![codecov.io](https://codecov.io/github/voku/idiorm/coverage.svg?branch=master)](https://codecov.io/github/voku/idiorm?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/voku/idiorm/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/voku/idiorm/?branch=master)
+[![Codacy Badge](https://api.codacy.com/project/badge/grade/3c6a803ad63c428c879241606af2726a)](https://www.codacy.com/app/voku/idiorm)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/d5f1d035-df77-4f36-86bb-d318c643525d/mini.png)](https://insight.sensiolabs.com/projects/d5f1d035-df77-4f36-86bb-d318c643525d)
+[![Latest Stable Version](https://poser.pugx.org/voku/idiorm/v/stable)](https://packagist.org/packages/voku/idiorm) [![Total Downloads](https://poser.pugx.org/voku/idiorm/downloads)](https://packagist.org/packages/voku/idiorm) [![Latest Unstable Version](https://poser.pugx.org/voku/idiorm/v/unstable)](https://packagist.org/packages/voku/idiorm) [![License](https://poser.pugx.org/voku/idiorm/license)](https://packagist.org/packages/voku/idiorm)
 
 [http://j4mie.github.com/idiormandparis/](http://j4mie.github.com/idiormandparis/)
 
