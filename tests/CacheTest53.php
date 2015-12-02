@@ -1,5 +1,7 @@
 <?php
 
+use idiorm\orm\ORM;
+
 class CacheTest53 extends PHPUnit_Framework_TestCase {
 
     const ALTERNATE = 'alternate'; // Used as name of alternate connection

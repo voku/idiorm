@@ -13,8 +13,19 @@ namespace idiorm\orm;
  */
 class IdiormString
 {
+  /**
+   * @var string
+   */
   protected $subject;
+
+  /**
+   * @var string
+   */
   protected $search;
+
+  /**
+   * @var string
+   */
   protected $replace;
 
   /**
@@ -72,7 +83,7 @@ class IdiormString
   }
 
   /**
-   * Validate an input string and perform a replace on all ocurrences
+   * Validate an input string and perform a replace on all occurrences
    * of $this->search with $this->replace
    *
    * @author Jeff Roberson <ridgerunner@fluxbb.org>

@@ -561,8 +561,8 @@ class ORM implements \ArrayAccess
   }
 
   /**
-   * Internal helper method for executing statments. Logs queries, and
-   * stores statement object in ::_last_statment, accessible publicly
+   * Internal helper method for executing statements. Logs queries, and
+   * stores statement object in ::_last_statement, accessible publicly
    * through ::get_last_statement()
    *
    * @param string $query
@@ -578,6 +578,7 @@ class ORM implements \ArrayAccess
     $time = microtime(true);
 
     foreach ($parameters as $key => &$param) {
+
       if (is_null($param)) {
         $type = \PDO::PARAM_NULL;
       } else if (is_bool($param)) {
@@ -588,6 +589,7 @@ class ORM implements \ArrayAccess
         $type = \PDO::PARAM_STR;
       }
 
+      // TODO? -> ++$key OR $key, $param, $type ...
       $statement->bindParam(is_int($key) ? ++$key : $key, $param, $type);
     }
 
@@ -692,6 +694,8 @@ class ORM implements \ArrayAccess
    * set to true. Otherwise, returned array will be empty.
    *
    * @param string $connection_name Which connection to use
+   *
+   * @return array
    */
   public static function get_query_log($connection_name = self::DEFAULT_CONNECTION)
   {
@@ -719,6 +723,10 @@ class ORM implements \ArrayAccess
   /**
    * "Private" constructor; shouldn't be called directly.
    * Use the ORM::for_table factory method instead.
+   *
+   * @param string $table_name
+   * @param array  $data
+   * @param string $connection_name
    */
   protected function __construct($table_name, $data = array(), $connection_name = self::DEFAULT_CONNECTION)
   {
@@ -736,6 +744,10 @@ class ORM implements \ArrayAccess
    * the instance. If so, all fields will be flagged as
    * dirty so all will be saved to the database when
    * save() is called.
+   *
+   * @param mixed $data
+   *
+   * @return $this
    */
   public function create($data = null)
   {
@@ -754,6 +766,10 @@ class ORM implements \ArrayAccess
    * This is mostly useful for libraries built on top of Idiorm, and will
    * not normally be used in manually built queries. If you don't know why
    * you would want to use this, you should probably just ignore it.
+   *
+   * @param string $id_column
+   *
+   * @return $this
    */
   public function use_id_column($id_column)
   {
@@ -765,6 +781,10 @@ class ORM implements \ArrayAccess
   /**
    * Create an ORM instance from the given row (an associative
    * array of data fetched from the database)
+   *
+   * @param array $row
+   *
+   * @return ORM
    */
   protected function _create_instance_from_row($row)
   {
@@ -783,6 +803,10 @@ class ORM implements \ArrayAccess
    * As a shortcut, you may supply an ID as a parameter
    * to this method. This will perform a primary key
    * lookup on the table.
+   *
+   * @param mixed $id
+   *
+   * @return false|ORM false on error
    */
   public function find_one($id = null)
   {
@@ -859,6 +883,10 @@ class ORM implements \ArrayAccess
    * Tell the ORM that you wish to execute a COUNT query.
    * Will return an integer representing the number of
    * rows returned.
+   *
+   * @param string $column
+   *
+   * @return int
    */
   public function count($column = '*')
   {
@@ -868,6 +896,10 @@ class ORM implements \ArrayAccess
   /**
    * Tell the ORM that you wish to execute a MAX query.
    * Will return the max value of the choosen column.
+   *
+   * @param string $column
+   *
+   * @return int
    */
   public function max($column)
   {
@@ -877,6 +909,10 @@ class ORM implements \ArrayAccess
   /**
    * Tell the ORM that you wish to execute a MIN query.
    * Will return the min value of the choosen column.
+   *
+   * @param string $column
+   *
+   * @return int
    */
   public function min($column)
   {
@@ -886,6 +922,10 @@ class ORM implements \ArrayAccess
   /**
    * Tell the ORM that you wish to execute a AVG query.
    * Will return the average value of the choosen column.
+   *
+   * @param string $column
+   *
+   * @return int
    */
   public function avg($column)
   {
@@ -895,6 +935,10 @@ class ORM implements \ArrayAccess
   /**
    * Tell the ORM that you wish to execute a SUM query.
    * Will return the sum of the choosen column.
+   *
+   * @param string $column
+   *
+   * @return int
    */
   public function sum($column)
   {
@@ -941,6 +985,10 @@ class ORM implements \ArrayAccess
    * instance of the class from an associative array of data.
    * This will usually be called only from inside the class,
    * but it's public in case you need to call it directly.
+   *
+   * @param array $data
+   *
+   * @return $this
    */
   public function hydrate($data = array())
   {
@@ -966,6 +1014,11 @@ class ORM implements \ArrayAccess
    * used, the parameters should be an array of values which will
    * be bound to the placeholders in the query. If this method
    * is called, all other query building methods will be ignored.
+   *
+   * @param string $query
+   * @param array  $parameters
+   *
+   * @return $this
    */
   public function raw_query($query, $parameters = array())
   {
@@ -978,6 +1031,10 @@ class ORM implements \ArrayAccess
 
   /**
    * Add an alias for the main table to be used in SELECT queries
+   *
+   * @param string $alias
+   *
+   * @return $this
    */
   public function table_alias($alias)
   {
@@ -990,6 +1047,11 @@ class ORM implements \ArrayAccess
    * Internal method to add an unquoted expression to the set
    * of columns returned by the SELECT query. The second optional
    * argument is the alias to return the expression as.
+   *
+   * @param string $expr
+   * @param mixed  $alias
+   *
+   * @return $this
    */
   protected function _add_result_column($expr, $alias = null)
   {
@@ -1024,6 +1086,11 @@ class ORM implements \ArrayAccess
    * Add a column to the list of columns returned by the SELECT
    * query. This defaults to '*'. The second optional argument is
    * the alias to return the column as.
+   *
+   * @param string $column
+   * @param mixed  $alias
+   *
+   * @return ORM
    */
   public function select($column, $alias = null)
   {
@@ -1036,6 +1103,11 @@ class ORM implements \ArrayAccess
    * Add an unquoted expression to the list of columns returned
    * by the SELECT query. The second optional argument is
    * the alias to return the column as.
+   *
+   * @param string $expr
+   * @param mixed  $alias
+   *
+   * @return ORM
    */
   public function select_expr($expr, $alias = null)
   {
@@ -1165,6 +1237,13 @@ class ORM implements \ArrayAccess
    * ON `user`.`id` = `profile`.`user_id`
    *
    * The final (optional) argument specifies an alias for the joined table.
+   *
+   * @param string      $join_operator
+   * @param string      $table
+   * @param string      $constraint
+   * @param string|null $table_alias
+   *
+   * @return $this
    */
   protected function _add_join_source($join_operator, $table, $constraint, $table_alias = null)
   {
@@ -1194,6 +1273,13 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a RAW JOIN source to the query
+   *
+   * @param string $table
+   * @param string $constraint
+   * @param string $table_alias
+   * @param array  $parameters
+   *
+   * @return $this
    */
   public function raw_join($table, $constraint, $table_alias, $parameters = array())
   {
@@ -1220,6 +1306,12 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a simple JOIN source to the query
+   *
+   * @param string      $table
+   * @param string      $constraint
+   * @param string|null $table_alias
+   *
+   * @return ORM
    */
   public function join($table, $constraint, $table_alias = null)
   {
@@ -1229,6 +1321,13 @@ class ORM implements \ArrayAccess
   /**
    * Add an INNER JOIN souce to the query
    */
+  /**
+   * @param string      $table
+   * @param string      $constraint
+   * @param null|string $table_alias
+   *
+   * @return ORM
+   */
   public function inner_join($table, $constraint, $table_alias = null)
   {
     return $this->_add_join_source("INNER", $table, $constraint, $table_alias);
@@ -1236,6 +1335,12 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a LEFT OUTER JOIN souce to the query
+   *
+   * @param string      $table
+   * @param string      $constraint
+   * @param null|string $table_alias
+   *
+   * @return $this|ORM
    */
   public function left_outer_join($table, $constraint, $table_alias = null)
   {
@@ -1244,6 +1349,12 @@ class ORM implements \ArrayAccess
 
   /**
    * Add an RIGHT OUTER JOIN souce to the query
+   *
+   * @param string      $table
+   * @param string      $constraint
+   * @param null|string $table_alias
+   *
+   * @return $this|ORM
    */
   public function right_outer_join($table, $constraint, $table_alias = null)
   {
@@ -1253,6 +1364,13 @@ class ORM implements \ArrayAccess
   /**
    * Add an FULL OUTER JOIN souce to the query
    */
+  /**
+   * @param string      $table
+   * @param string      $constraint
+   * @param null|string $table_alias
+   *
+   * @return ORM
+   */
   public function full_outer_join($table, $constraint, $table_alias = null)
   {
     return $this->_add_join_source("FULL OUTER", $table, $constraint, $table_alias);
@@ -1260,6 +1378,12 @@ class ORM implements \ArrayAccess
 
   /**
    * Internal method to add a HAVING condition to the query
+   */
+  /**
+   * @param string $fragment
+   * @param array  $values
+   *
+   * @return ORM
    */
   protected function _add_having($fragment, $values = array())
   {
@@ -1269,6 +1393,13 @@ class ORM implements \ArrayAccess
   /**
    * Internal method to add a HAVING condition to the query
    */
+  /**
+   * @param string|array $column_name
+   * @param string       $separator
+   * @param mixed        $value
+   *
+   * @return $this|ORM
+   */
   protected function _add_simple_having($column_name, $separator, $value)
   {
     return $this->_add_simple_condition('having', $column_name, $separator, $value);
@@ -1277,6 +1408,13 @@ class ORM implements \ArrayAccess
   /**
    * Internal method to add a HAVING clause with multiple values (like IN and NOT IN)
    */
+  /**
+   * @param string|array $column_name
+   * @param string       $separator
+   * @param mixed        $values
+   *
+   * @return ORM
+   */
   public function _add_having_placeholder($column_name, $separator, $values)
   {
     if (!is_array($column_name)) {
@@ -1284,6 +1422,7 @@ class ORM implements \ArrayAccess
     } else {
       $data = $column_name;
     }
+
     $result = $this;
     foreach ($data as $key => $val) {
       $column = $result->_quote_identifier($key);
@@ -1296,10 +1435,20 @@ class ORM implements \ArrayAccess
 
   /**
    * Internal method to add a HAVING clause with no parameters(like IS NULL and IS NOT NULL)
+   *
+   * @param string|array $column_name
+   * @param string       $operator
+   *
+   * @return ORM
    */
   public function _add_having_no_value($column_name, $operator)
   {
-    $conditions = (is_array($column_name)) ? $column_name : array($column_name);
+    if (is_array($column_name)) {
+      $conditions = $column_name;
+    } else {
+      $conditions = array($column_name);
+    }
+
     $result = $this;
     foreach ($conditions as $column) {
       $column = $this->_quote_identifier($column);
@@ -1311,6 +1460,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Internal method to add a WHERE condition to the query
+   *
+   * @param string $fragment
+   * @param array  $values
+   *
+   * @return ORM
    */
   protected function _add_where($fragment, $values = array())
   {
@@ -1319,6 +1473,12 @@ class ORM implements \ArrayAccess
 
   /**
    * Internal method to add a WHERE condition to the query
+   *
+   * @param string|array $column_name
+   * @param string       $separator
+   * @param mixed        $value
+   *
+   * @return $this|ORM
    */
   protected function _add_simple_where($column_name, $separator, $value)
   {
@@ -1327,6 +1487,12 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a WHERE clause with multiple values (like IN and NOT IN)
+   *
+   * @param string|array $column_name
+   * @param string       $separator
+   * @param mixed        $values
+   *
+   * @return ORM
    */
   public function _add_where_placeholder($column_name, $separator, $values)
   {
@@ -1335,6 +1501,7 @@ class ORM implements \ArrayAccess
     } else {
       $data = $column_name;
     }
+
     $result = $this;
     foreach ($data as $key => $val) {
       $column = $result->_quote_identifier($key);
@@ -1347,10 +1514,20 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a WHERE clause with no parameters(like IS NULL and IS NOT NULL)
+   *
+   * @param string $column_name
+   * @param string $operator
+   *
+   * @return ORM
    */
   public function _add_where_no_value($column_name, $operator)
   {
-    $conditions = (is_array($column_name)) ? $column_name : array($column_name);
+    if (is_array($column_name)) {
+      $conditions = $column_name;
+    } else {
+      $conditions = array($column_name);
+    }
+
     $result = $this;
     foreach ($conditions as $column) {
       $column = $this->_quote_identifier($column);
@@ -1362,18 +1539,27 @@ class ORM implements \ArrayAccess
 
   /**
    * Internal method to add a HAVING or WHERE condition to the query
+   *
+   * @param string $type
+   * @param string $fragment
+   * @param array  $values
+   *
+   * @return $this
    */
   protected function _add_condition($type, $fragment, $values = array())
   {
     $conditions_class_property_name = "_{$type}_conditions";
+
     if (!is_array($values)) {
       $values = array($values);
     }
+
     array_push(
-        $this->$conditions_class_property_name, array(
-                                                  self::CONDITION_FRAGMENT => $fragment,
-                                                  self::CONDITION_VALUES   => $values,
-                                              )
+        $this->$conditions_class_property_name,
+        array(
+            self::CONDITION_FRAGMENT => $fragment,
+            self::CONDITION_VALUES   => $values,
+        )
     );
 
     return $this;
@@ -1386,10 +1572,22 @@ class ORM implements \ArrayAccess
    * of the call to _quote_identifier
    *
    * If column_name is an associative array, it will add a condition for each column
+   *
+   * @param string       $type
+   * @param string|array $column_name
+   * @param string       $separator
+   * @param string|int   $value
+   *
+   * @return $this|ORM
    */
   protected function _add_simple_condition($type, $column_name, $separator, $value)
   {
-    $multiple = is_array($column_name) ? $column_name : array($column_name => $value);
+    if (is_array($column_name)) {
+      $multiple = $column_name;
+    } else {
+      $multiple = array($column_name => $value);
+    }
+
     $result = $this;
 
     foreach ($multiple as $key => $val) {
@@ -1412,6 +1610,10 @@ class ORM implements \ArrayAccess
   /**
    * Return a string containing the given number of question marks,
    * separated by commas. Eg "?, ?, ?"
+   *
+   * @param mixed $fields
+   *
+   * @return string
    */
   protected function _create_placeholders($fields)
   {
@@ -1427,6 +1629,8 @@ class ORM implements \ArrayAccess
       }
 
       return implode(', ', $db_fields);
+    } else {
+      return '';
     }
   }
 
@@ -1436,6 +1640,10 @@ class ORM implements \ArrayAccess
    *
    * If the key contains a column that does not exist in the given array,
    * a null value will be returned for it.
+   *
+   * @param mixed $value
+   *
+   * @return array
    */
   protected function _get_compound_id_column_values($value)
   {
@@ -1450,6 +1658,10 @@ class ORM implements \ArrayAccess
   /**
    * Helper method that filters an array containing compound column/value
    * arrays.
+   *
+   * @param array $values
+   *
+   * @return array
    */
   protected function _get_compound_id_column_values_array($values)
   {
@@ -1469,6 +1681,11 @@ class ORM implements \ArrayAccess
    *
    * If you use an array in $column_name, a new clause will be
    * added for each element. In this case, $value is ignored.
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function where($column_name, $value = null)
   {
@@ -1478,6 +1695,11 @@ class ORM implements \ArrayAccess
   /**
    * More explicitly named version of for the where() method.
    * Can be used if preferred.
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function where_equal($column_name, $value = null)
   {
@@ -1486,6 +1708,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a WHERE column != value clause to your query.
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function where_not_equal($column_name, $value = null)
   {
@@ -1497,12 +1724,18 @@ class ORM implements \ArrayAccess
    *
    * If primary key is compound, only the columns that
    * belong to they key will be used for the query
+   *
+   * @param mixed $id
+   *
+   * @return $this|ORM
    */
   public function where_id_is($id)
   {
-    return (is_array($this->_get_id_column_name())) ?
-        $this->where($this->_get_compound_id_column_values($id), null) :
-        $this->where($this->_get_id_column_name(), $id);
+    if (is_array($this->_get_id_column_name())) {
+      return $this->where($this->_get_compound_id_column_values($id), null);
+    } else {
+      return $this->where($this->_get_id_column_name(), $id);
+    }
   }
 
   /**
@@ -1511,9 +1744,14 @@ class ORM implements \ArrayAccess
    * be a different condition, where the key will be the column name.
    *
    * By default, an equal operator will be used against all columns, but
-   * it can be overriden for any or every column using the second parameter.
+   * it can be overridden for any or every column using the second parameter.
    *
    * Each condition will be ORed together when added to the final query.
+   *
+   * @param array  $values
+   * @param string $operator
+   *
+   * @return $this|ORM
    */
   public function where_any_is($values, $operator = '=')
   {
@@ -1529,8 +1767,13 @@ class ORM implements \ArrayAccess
       $firstsub = true;
 
       // TODO? -> $item
-      foreach ($item as $key => $item) {
-        $op = is_string($operator) ? $operator : (isset($operator[$key]) ? $operator[$key] : '=');
+      foreach ($item as $key => $subItem) {
+
+        if (is_string($operator)) {
+          $op = $operator;
+        } else {
+          $op = (isset($operator[$key]) ? $operator[$key] : '=');
+        }
 
         if ($firstsub) {
           $firstsub = false;
@@ -1539,7 +1782,7 @@ class ORM implements \ArrayAccess
         }
 
         $query[] = $this->_quote_identifier($key);
-        $data[] = $item;
+        $data[] = $subItem;
         $query[] = $op . " ?";
       }
     }
@@ -1553,16 +1796,27 @@ class ORM implements \ArrayAccess
    *
    * If primary key is compound, only the columns that
    * belong to they key will be used for the query
+   *
+   * @param mixed $ids
+   *
+   * @return $this|ORM
    */
   public function where_id_in($ids)
   {
-    return (is_array($this->_get_id_column_name())) ?
-        $this->where_any_is($this->_get_compound_id_column_values_array($ids)) :
-        $this->where_in($this->_get_id_column_name(), $ids);
+    if (is_array($this->_get_id_column_name())) {
+      return $this->where_any_is($this->_get_compound_id_column_values_array($ids));
+    } else {
+      return $this->where_in($this->_get_id_column_name(), $ids);
+    }
   }
 
   /**
    * Add a WHERE ... LIKE clause to your query.
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function where_like($column_name, $value = null)
   {
@@ -1571,6 +1825,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add where WHERE ... NOT LIKE clause to your query.
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function where_not_like($column_name, $value = null)
   {
@@ -1579,6 +1838,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a WHERE ... > clause to your query
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function where_gt($column_name, $value = null)
   {
@@ -1587,6 +1851,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a WHERE ... < clause to your query
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function where_lt($column_name, $value = null)
   {
@@ -1595,6 +1864,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a WHERE ... >= clause to your query
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function where_gte($column_name, $value = null)
   {
@@ -1603,6 +1877,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a WHERE ... <= clause to your query
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function where_lte($column_name, $value = null)
   {
@@ -1611,6 +1890,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a WHERE ... IN clause to your query
+   *
+   * @param string $column_name
+   * @param mixed  $values
+   *
+   * @return $this|ORM
    */
   public function where_in($column_name, $values)
   {
@@ -1619,6 +1903,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a WHERE ... NOT IN clause to your query
+   *
+   * @param string $column_name
+   * @param mixed  $values
+   *
+   * @return $this|ORM
    */
   public function where_not_in($column_name, $values)
   {
@@ -1627,6 +1916,10 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a WHERE column IS NULL clause to your query
+   *
+   * @param string $column_name
+   *
+   * @return $this|ORM
    */
   public function where_null($column_name)
   {
@@ -1635,6 +1928,10 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a WHERE column IS NOT NULL clause to your query
+   *
+   * @param string $column_name
+   *
+   * @return $this|ORM
    */
   public function where_not_null($column_name)
   {
@@ -1645,6 +1942,11 @@ class ORM implements \ArrayAccess
    * Add a raw WHERE clause to the query. The clause should
    * contain question mark placeholders, which will be bound
    * to the parameters supplied in the second argument.
+   *
+   * @param       $clause
+   * @param array $parameters
+   *
+   * @return $this|ORM
    */
   public function where_raw($clause, $parameters = array())
   {
@@ -1653,6 +1955,10 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a LIMIT to the query
+   *
+   * @param int $limit
+   *
+   * @return $this
    */
   public function limit($limit)
   {
@@ -1663,6 +1969,10 @@ class ORM implements \ArrayAccess
 
   /**
    * Add an OFFSET to the query
+   *
+   * @param $offset
+   *
+   * @return $this
    */
   public function offset($offset)
   {
@@ -1673,6 +1983,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add an ORDER BY clause to the query
+   *
+   * @param string $column_name
+   * @param string $ordering
+   *
+   * @return $this
    */
   protected function _add_order_by($column_name, $ordering)
   {
@@ -1684,6 +1999,10 @@ class ORM implements \ArrayAccess
 
   /**
    * Add an ORDER BY column DESC clause
+   *
+   * @param string $column_name
+   *
+   * @return $this|ORM
    */
   public function order_by_desc($column_name)
   {
@@ -1692,6 +2011,10 @@ class ORM implements \ArrayAccess
 
   /**
    * Add an ORDER BY column ASC clause
+   *
+   * @param string $column_name
+   *
+   * @return $this|ORM
    */
   public function order_by_asc($column_name)
   {
@@ -1700,6 +2023,10 @@ class ORM implements \ArrayAccess
 
   /**
    * Add an unquoted expression as an ORDER BY clause
+   *
+   * @param $clause
+   *
+   * @return $this
    */
   public function order_by_expr($clause)
   {
@@ -1710,6 +2037,10 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a column to the list of columns to GROUP BY
+   *
+   * @param string $column_name
+   *
+   * @return $this
    */
   public function group_by($column_name)
   {
@@ -1721,6 +2052,10 @@ class ORM implements \ArrayAccess
 
   /**
    * Add an unquoted expression to the list of columns to GROUP BY
+   *
+   * @param string $expr
+   *
+   * @return $this
    */
   public function group_by_expr($expr)
   {
@@ -1737,6 +2072,11 @@ class ORM implements \ArrayAccess
    *
    * If you use an array in $column_name, a new clause will be
    * added for each element. In this case, $value is ignored.
+   *
+   * @param string $column_name
+   * @param null   $value
+   *
+   * @return $this|ORM
    */
   public function having($column_name, $value = null)
   {
@@ -1746,6 +2086,11 @@ class ORM implements \ArrayAccess
   /**
    * More explicitly named version of for the having() method.
    * Can be used if preferred.
+   *
+   * @param string $column_name
+   * @param null   $value
+   *
+   * @return $this|ORM
    */
   public function having_equal($column_name, $value = null)
   {
@@ -1754,6 +2099,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a HAVING column != value clause to your query.
+   *
+   * @param string $column_name
+   * @param null   $value
+   *
+   * @return $this|ORM
    */
   public function having_not_equal($column_name, $value = null)
   {
@@ -1781,6 +2131,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a HAVING ... LIKE clause to your query.
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function having_like($column_name, $value = null)
   {
@@ -1789,6 +2144,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add where HAVING ... NOT LIKE clause to your query.
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function having_not_like($column_name, $value = null)
   {
@@ -1797,6 +2157,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a HAVING ... > clause to your query
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function having_gt($column_name, $value = null)
   {
@@ -1805,6 +2170,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a HAVING ... < clause to your query
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function having_lt($column_name, $value = null)
   {
@@ -1813,6 +2183,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a HAVING ... >= clause to your query
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function having_gte($column_name, $value = null)
   {
@@ -1821,6 +2196,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a HAVING ... <= clause to your query
+   *
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return $this|ORM
    */
   public function having_lte($column_name, $value = null)
   {
@@ -1829,6 +2209,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a HAVING ... IN clause to your query
+   *
+   * @param string $column_name
+   * @param mixed  $values
+   *
+   * @return $this|ORM
    */
   public function having_in($column_name, $values = null)
   {
@@ -1837,6 +2222,11 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a HAVING ... NOT IN clause to your query
+   *
+   * @param string $column_name
+   * @param mixed  $values
+   *
+   * @return $this|ORM
    */
   public function having_not_in($column_name, $values = null)
   {
@@ -1845,6 +2235,10 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a HAVING column IS NULL clause to your query
+   *
+   * @param string $column_name
+   *
+   * @return $this|ORM
    */
   public function having_null($column_name)
   {
@@ -1853,6 +2247,10 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a HAVING column IS NOT NULL clause to your query
+   *
+   * @param string $column_name
+   *
+   * @return $this|ORM
    */
   public function having_not_null($column_name)
   {
@@ -1863,6 +2261,11 @@ class ORM implements \ArrayAccess
    * Add a raw HAVING clause to the query. The clause should
    * contain question mark placeholders, which will be bound
    * to the parameters supplied in the second argument.
+   *
+   * @param       $clause
+   * @param array $parameters
+   *
+   * @return $this|ORM
    */
   public function having_raw($clause, $parameters = array())
   {
@@ -2066,6 +2469,11 @@ class ORM implements \ArrayAccess
   /**
    * Wrapper around PHP's join function which
    * only adds the pieces if they are not empty.
+   *
+   * @param string $glue
+   * @param array  $pieces
+   *
+   * @return string
    */
   protected function _join_if_not_empty($glue, $pieces)
   {
@@ -2086,6 +2494,10 @@ class ORM implements \ArrayAccess
    * Quote a string that is used as an identifier
    * (table names, column names etc). This method can
    * also deal with dot-separated identifiers eg table.column
+   *
+   * @param string $identifier
+   *
+   * @return string
    */
   protected function _quote_one_identifier($identifier)
   {
@@ -2100,6 +2512,10 @@ class ORM implements \ArrayAccess
    * (table names, column names etc) or an array containing
    * multiple identifiers. This method can also deal with
    * dot-separated identifiers eg table.column
+   *
+   * @param array|string $identifier
+   *
+   * @return string
    */
   protected function _quote_identifier($identifier)
   {
@@ -2116,6 +2532,10 @@ class ORM implements \ArrayAccess
    * This method performs the actual quoting of a single
    * part of an identifier, using the identifier quote
    * character specified in the config (or autodetected).
+   *
+   * @param string $part
+   *
+   * @return string
    */
   protected function _quote_identifier_part($part)
   {
@@ -2134,17 +2554,25 @@ class ORM implements \ArrayAccess
 
   /**
    * Create a cache key for the given query and parameters.
+   *
+   * @param string      $query
+   * @param array       $parameters
+   * @param null|string $table_name
+   * @param string      $connection_name
+   *
+   * @return mixed|string
    */
   protected static function _create_cache_key($query, $parameters, $table_name = null, $connection_name = self::DEFAULT_CONNECTION)
   {
     if (isset(self::$_config[$connection_name]['create_cache_key']) and is_callable(self::$_config[$connection_name]['create_cache_key'])) {
       return call_user_func_array(
-          self::$_config[$connection_name]['create_cache_key'], array(
-                                                                  $query,
-                                                                  $parameters,
-                                                                  $table_name,
-                                                                  $connection_name,
-                                                              )
+          self::$_config[$connection_name]['create_cache_key'],
+          array(
+              $query,
+              $parameters,
+              $table_name,
+              $connection_name,
+          )
       );
     }
     $parameter_string = join(',', $parameters);
@@ -2156,6 +2584,12 @@ class ORM implements \ArrayAccess
   /**
    * Check the query cache for the given cache key. If a value
    * is cached for the key, return the value. Otherwise, return false.
+   *
+   * @param string      $cache_key
+   * @param null|string $table_name
+   * @param string      $connection_name
+   *
+   * @return bool|mixed
    */
   protected static function _check_query_cache($cache_key, $table_name = null, $connection_name = self::DEFAULT_CONNECTION)
   {
@@ -2181,38 +2615,69 @@ class ORM implements \ArrayAccess
 
   /**
    * Clear the query cache
+   *
+   * @param null|string $table_name
+   * @param string      $connection_name
+   *
+   * @return bool|mixed
    */
   public static function clear_cache($table_name = null, $connection_name = self::DEFAULT_CONNECTION)
   {
+    // init
     self::$_query_cache = array();
-    if (isset(self::$_config[$connection_name]['clear_cache']) and is_callable(self::$_config[$connection_name]['clear_cache'])) {
+
+    if (
+        isset(self::$_config[$connection_name]['clear_cache'])
+        &&
+        is_callable(self::$_config[$connection_name]['clear_cache'])
+    ) {
       return call_user_func_array(
-          self::$_config[$connection_name]['clear_cache'], array(
-                                                             $table_name,
-                                                             $connection_name,
-                                                         )
+          self::$_config[$connection_name]['clear_cache'],
+          array(
+              $table_name,
+              $connection_name,
+          )
       );
     }
+
+    return false;
   }
 
   /**
    * Add the given value to the query cache.
+   *
+   * @param string      $cache_key
+   * @param string      $value
+   * @param null|string $table_name
+   * @param string      $connection_name
+   *
+   * @return bool|mixed
    */
   protected static function _cache_query_result($cache_key, $value, $table_name = null, $connection_name = self::DEFAULT_CONNECTION)
   {
-    if (isset(self::$_config[$connection_name]['cache_query_result']) and is_callable(self::$_config[$connection_name]['cache_query_result'])) {
+    if (
+        isset(self::$_config[$connection_name]['cache_query_result'])
+        and
+        is_callable(self::$_config[$connection_name]['cache_query_result'])
+    ) {
+
       return call_user_func_array(
-          self::$_config[$connection_name]['cache_query_result'], array(
-                                                                    $cache_key,
-                                                                    $value,
-                                                                    $table_name,
-                                                                    $connection_name,
-                                                                )
+          self::$_config[$connection_name]['cache_query_result'],
+          array(
+              $cache_key,
+              $value,
+              $table_name,
+              $connection_name,
+          )
       );
+
     } elseif (!isset(self::$_query_cache[$connection_name])) {
       self::$_query_cache[$connection_name] = array();
     }
+
     self::$_query_cache[$connection_name][$cache_key] = $value;
+
+    return true;
   }
 
   /**
@@ -2221,6 +2686,9 @@ class ORM implements \ArrayAccess
    */
   protected function _run()
   {
+    // init
+    $cache_key = false;
+
     $query = $this->_build_select();
     $caching_enabled = self::$_config[$this->_connection_name]['caching'];
 
@@ -2244,7 +2712,7 @@ class ORM implements \ArrayAccess
       $rows[] = $row;
     }
 
-    if ($caching_enabled && !$this->_no_caching) {
+    if ($cache_key) {
       self::_cache_query_result($cache_key, $rows, $this->_table_name, $this->_connection_name);
     }
 
@@ -2278,6 +2746,10 @@ class ORM implements \ArrayAccess
    *
    * If a column-names array is passed, it will return a associative array
    * with the value of each column or null if it is not present.
+   *
+   * @param mixed $key
+   *
+   * @return mixed
    */
   public function get($key)
   {
@@ -2311,6 +2783,12 @@ class ORM implements \ArrayAccess
 
   /**
    * Get the primary key ID of this object.
+   *
+   * @param bool $disallow_null
+   *
+   * @return mixed
+   *
+   * @throws \Exception
    */
   public function id($disallow_null = false)
   {
@@ -2337,6 +2815,11 @@ class ORM implements \ArrayAccess
    * as the first parameter and leave out the second parameter.
    * Flags the properties as 'dirty' so they will be saved to the
    * database when save() is called.
+   *
+   * @param mixed $key
+   * @param mixed $value
+   *
+   * @return $this|ORM
    */
   public function set($key, $value = null)
   {
@@ -2352,6 +2835,8 @@ class ORM implements \ArrayAccess
    *
    * @param string|array $key
    * @param string|null  $value
+   *
+   * @return ORM
    */
   public function set_expr($key, $value = null)
   {
@@ -2361,9 +2846,11 @@ class ORM implements \ArrayAccess
   /**
    * Set a property on the ORM object.
    *
-   * @param string|array $key
-   * @param string|null  $value
-   * @param bool         $raw Whether this value should be treated as raw or not
+   * @param  string|array $key
+   * @param string|null   $value
+   * @param bool          $expr
+   *
+   * @return $this
    */
   protected function _set_orm_property($key, $value = null, $expr = false)
   {
@@ -2373,7 +2860,7 @@ class ORM implements \ArrayAccess
     foreach ($key as $field => $value) {
       $this->_data[$field] = $value;
       $this->_dirty_fields[$field] = $value;
-      if (false === $expr and isset($this->_expr_fields[$field])) {
+      if (false === $expr && isset($this->_expr_fields[$field])) {
         unset($this->_expr_fields[$field]);
       } else if (true === $expr) {
         $this->_expr_fields[$field] = true;
@@ -2386,6 +2873,10 @@ class ORM implements \ArrayAccess
   /**
    * Check whether the given field has been changed since this
    * object was saved.
+   *
+   * @param string $key
+   *
+   * @return bool
    */
   public function is_dirty($key)
   {
@@ -2408,8 +2899,6 @@ class ORM implements \ArrayAccess
    */
   public function save()
   {
-    $query = array();
-
     // remove any expression fields as they are already baked into the query
     $values = array_values(array_diff_key($this->_dirty_fields, $this->_expr_fields));
 
@@ -2478,6 +2967,8 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a WHERE clause for every column that belongs to the primary key
+   *
+   * @param array $query warning: this is a reference
    */
   public function _add_id_column_conditions(&$query)
   {
@@ -2559,7 +3050,11 @@ class ORM implements \ArrayAccess
     );
     $this->_add_id_column_conditions($query);
 
-    return self::_execute(join(" ", $query), is_array($this->id(true)) ? array_values($this->id(true)) : array($this->id(true)), $this->_connection_name);
+    return self::_execute(
+        join(" ", $query), is_array($this->id(true)) ?
+        array_values($this->id(true)) :
+        array($this->id(true)), $this->_connection_name
+    );
   }
 
   /**
@@ -2644,6 +3139,8 @@ class ORM implements \ArrayAccess
    * @param  array  $arguments
    *
    * @return ORM
+   *
+   * @throws IdiormMethodMissingException
    */
   public function __call($name, $arguments)
   {
