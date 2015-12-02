@@ -11,6 +11,8 @@ Idiorm
 
 [http://j4mie.github.com/idiormandparis/](http://j4mie.github.com/idiormandparis/)
 
+WARNING: this is only a Maintained-Fork of "https://github.com/j4mie/idiorm/"
+
 ---
 
 A lightweight nearly-zero-configuration object-relational mapper and fluent query builder for PHP5.
