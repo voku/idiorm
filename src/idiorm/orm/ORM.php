@@ -2331,16 +2331,17 @@ class ORM implements \ArrayAccess
     // Build and return the full SELECT statement by concatenating
     // the results of calling each separate builder method.
     return $this->_join_if_not_empty(
-        " ", array(
-               $this->_build_select_start(),
-               $this->_build_join(),
-               $this->_build_where(),
-               $this->_build_group_by(),
-               $this->_build_having(),
-               $this->_build_order_by(),
-               $this->_build_limit(),
-               $this->_build_offset(),
-           )
+        " ",
+        array(
+            $this->_build_select_start(),
+            $this->_build_join(),
+            $this->_build_where(),
+            $this->_build_group_by(),
+            $this->_build_having(),
+            $this->_build_order_by(),
+            $this->_build_limit(),
+            $this->_build_offset(),
+        )
     );
   }
 
@@ -2444,6 +2445,7 @@ class ORM implements \ArrayAccess
       return '';
     }
 
+    // TODO: "Database queries should use parameter binding" !!!
     return "ORDER BY " . join(", ", $this->_order_by);
   }
 
