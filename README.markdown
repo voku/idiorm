@@ -77,6 +77,8 @@ foreach ($tweets as $tweet) {
 Changelog
 ---------
 
+* fixed for ORM::is_dirty() [[tentwofour](https://github.com/tentwofour)] - [pr #268](https://github.com/j4mie/idiorm/pull/268)
+
 #### 2.0.0 - release 2015-12-02
 
 * added PSR-4 autoloader
