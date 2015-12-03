@@ -2457,8 +2457,12 @@ class ORM implements \ArrayAccess
    */
   protected function _build_limit()
   {
+    // init
     $fragment = '';
-    if (!is_null($this->_limit) &&
+
+    if (
+        !is_null($this->_limit)
+        &&
         static::$_config[$this->_connection_name]['limit_clause_style'] == ORM::LIMIT_STYLE_LIMIT
     ) {
       if (static::get_db($this->_connection_name)->getAttribute(\PDO::ATTR_DRIVER_NAME) == 'firebird') {
@@ -2466,6 +2470,9 @@ class ORM implements \ArrayAccess
       } else {
         $fragment = 'LIMIT';
       }
+
+      $this->_limit = (int)$this->_limit;
+
       $fragment .= " {$this->_limit}";
     }
 
@@ -2482,6 +2489,8 @@ class ORM implements \ArrayAccess
       if (static::get_db($this->_connection_name)->getAttribute(\PDO::ATTR_DRIVER_NAME) == 'firebird') {
         $clause = 'TO';
       }
+
+      $this->_offset = (int)$this->_offset;
 
       return "$clause " . $this->_offset;
     }
