@@ -384,7 +384,9 @@ class ORM implements \ArrayAccess
    */
   protected static function _setup_db($connection_name = self::DEFAULT_CONNECTION)
   {
-    if (!array_key_exists($connection_name, static::$_db) ||
+    if (
+        !array_key_exists($connection_name, static::$_db)
+        ||
         !is_object(static::$_db[$connection_name])
     ) {
       static::_setup_db_config($connection_name);
@@ -423,6 +425,7 @@ class ORM implements \ArrayAccess
   {
     static::_setup_db_config($connection_name);
     static::$_db[$connection_name] = $db;
+
     if (!is_null(static::$_db[$connection_name])) {
       static::_setup_identifier_quote_character($connection_name);
       static::_setup_limit_clause_style($connection_name);
