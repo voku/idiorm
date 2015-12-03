@@ -77,11 +77,14 @@ foreach ($tweets as $tweet) {
 Changelog
 ---------
 
+#### 2.1.0 - release 2015-12-03
+
 * fixed for ORM->is_dirty() [[tentwofour](https://github.com/tentwofour)] - [pr #268](https://github.com/j4mie/idiorm/pull/268)
 * fixed ORM->is_new() [[nicolas-brousse](https://github.com/nicolas-brousse)] - [pr #249](https://github.com/j4mie/idiorm/pull/249)
 * fixed autoincremented compound keys inserts [[lrlopez](https://github.com/lrlopez)] - [pr #235](https://github.com/j4mie/idiorm/pull/235)
 * added "ORM->reset_order_by()" [[nicolas-brousse](https://github.com/nicolas-brousse)] - [+](https://github.com/nicolas-brousse/idiorm/commit/89e56051200accbfc430c1ec0c6c1c37a1a85c6f)
 * use static keywords instead of self [[maboiteaspam](https://github.com/maboiteaspam)] - [+](https://github.com/maboiteaspam/idiorm/commit/0aa9f4f1c16d22f39cc18a2d68461805e3b3d944)
+* use type-casting for limit and offset
 
 #### 2.0.0 - release 2015-12-02
 
