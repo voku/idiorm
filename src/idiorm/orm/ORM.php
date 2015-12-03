@@ -2958,7 +2958,7 @@ class ORM implements \ArrayAccess
           // if the primary key is compound, assign the last inserted id
           // to the first column
           if (is_array($column)) {
-            $column = array_slice($column, 0, 1);
+            $column = reset($column);
           }
           $this->_data[$column] = $db->lastInsertId();
         }
