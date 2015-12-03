@@ -1,5 +1,7 @@
 <?php
 
+use idiorm\orm\ORM;
+
 // ------------------- //
 // --- Idiorm Demo --- //
 // ------------------- //
@@ -10,6 +12,7 @@
 // In case it's not obvious: this is not the correct way to build web applications!
 
 // Require the idiorm file
+
 require_once("../vendor/autoload.php");
 
 // Connect to the demo database file
