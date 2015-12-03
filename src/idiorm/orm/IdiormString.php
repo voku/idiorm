@@ -33,11 +33,11 @@ class IdiormString
    *
    * @param string $subject
    *
-   * @return \self
+   * @return \static
    */
   public static function value($subject)
   {
-    return new self($subject);
+    return new static($subject);
   }
 
   /**
@@ -52,7 +52,7 @@ class IdiormString
    */
   public static function str_replace_outside_quotes($search, $replace, $subject)
   {
-    return self::value($subject)->replace_outside_quotes($search, $replace);
+    return static::value($subject)->replace_outside_quotes($search, $replace);
   }
 
   /**
