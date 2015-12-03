@@ -2582,7 +2582,11 @@ class ORM implements \ArrayAccess
    */
   protected static function _create_cache_key($query, $parameters, $table_name = null, $connection_name = self::DEFAULT_CONNECTION)
   {
-    if (isset(static::$_config[$connection_name]['create_cache_key']) and is_callable(static::$_config[$connection_name]['create_cache_key'])) {
+    if (
+        isset(static::$_config[$connection_name]['create_cache_key']) === true
+        &&
+        is_callable(static::$_config[$connection_name]['create_cache_key']) === true
+    ) {
       return call_user_func_array(
           static::$_config[$connection_name]['create_cache_key'],
           array(
@@ -2612,9 +2616,9 @@ class ORM implements \ArrayAccess
   protected static function _check_query_cache($cache_key, $table_name = null, $connection_name = self::DEFAULT_CONNECTION)
   {
     if (
-        isset(static::$_config[$connection_name]['check_query_cache'])
-        and
-        is_callable(static::$_config[$connection_name]['check_query_cache'])
+        isset(static::$_config[$connection_name]['check_query_cache']) === true
+        &&
+        is_callable(static::$_config[$connection_name]['check_query_cache']) === true
     ) {
       return call_user_func_array(
           static::$_config[$connection_name]['check_query_cache'],
@@ -2645,9 +2649,9 @@ class ORM implements \ArrayAccess
     static::$_query_cache = array();
 
     if (
-        isset(static::$_config[$connection_name]['clear_cache'])
+        isset(static::$_config[$connection_name]['clear_cache']) === true
         &&
-        is_callable(static::$_config[$connection_name]['clear_cache'])
+        is_callable(static::$_config[$connection_name]['clear_cache']) === true
     ) {
       return call_user_func_array(
           static::$_config[$connection_name]['clear_cache'],
@@ -2674,9 +2678,9 @@ class ORM implements \ArrayAccess
   protected static function _cache_query_result($cache_key, $value, $table_name = null, $connection_name = self::DEFAULT_CONNECTION)
   {
     if (
-        isset(static::$_config[$connection_name]['cache_query_result'])
-        and
-        is_callable(static::$_config[$connection_name]['cache_query_result'])
+        isset(static::$_config[$connection_name]['cache_query_result']) === true
+        &&
+        is_callable(static::$_config[$connection_name]['cache_query_result']) === true
     ) {
 
       return call_user_func_array(
