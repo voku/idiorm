@@ -286,10 +286,10 @@ class QueryBuilderTest extends PHPUnit_Framework_TestCase
   {
     ORM::for_table('widget')->group_by('name')->having_raw(
         '`name` = ? AND (`age` = ? OR `age` = ?)', array(
-        'Fred',
-        5,
-        10,
-    )
+                                                     'Fred',
+                                                     5,
+                                                     10,
+                                                 )
     )->find_many();
     $expected = "SELECT * FROM `widget` GROUP BY `name` HAVING `name` = 'Fred' AND (`age` = '5' OR `age` = '10')";
     $this->assertEquals($expected, ORM::get_last_query());
