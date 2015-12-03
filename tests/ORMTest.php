@@ -46,8 +46,14 @@ class ORMTest extends PHPUnit_Framework_TestCase {
     public function testIsDirty() {
         $model = ORM::for_table('test')->create();
         $this->assertFalse($model->is_dirty('test'));
-        
+
         $model = ORM::for_table('test')->create(array('test' => 'test'));
+        $this->assertTrue($model->is_dirty('test'));
+
+        $model->test = null;
+        $this->assertTrue($model->is_dirty('test'));
+
+        $model->test = '';
         $this->assertTrue($model->is_dirty('test'));
     }
 
@@ -73,9 +79,9 @@ class ORMTest extends PHPUnit_Framework_TestCase {
         $result_set = ORM::for_table('test')->find_many();
         $this->assertInstanceOf('idiorm\orm\IdiormResultSet', $result_set);
         $this->assertSame(count($result_set), 5);
-        
+
         ORM::configure('return_result_sets', false);
-        
+
         $result_set = ORM::for_table('test')->find_many();
         $this->assertInternalType('array', $result_set);
         $this->assertSame(count($result_set), 5);
