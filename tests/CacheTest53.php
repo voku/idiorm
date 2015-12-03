@@ -91,6 +91,7 @@ class CacheTest53 extends PHPUnit_Framework_TestCase
     $new->name = "Joe";
     $new->age = 25;
     $saved = $new->save();
+    $this->assertTrue($saved);
 
     //our custom cache should be empty now
     $this->assertEquals(true, empty($my_cache));
