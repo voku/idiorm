@@ -78,6 +78,7 @@ Changelog
 ---------
 
 * fixed for ORM::is_dirty() [[tentwofour](https://github.com/tentwofour)] - [pr #268](https://github.com/j4mie/idiorm/pull/268)
+* Fix ORM::is_new() [[nicolas-brousse](https://github.com/nicolas-brousse)] - [pr #249](https://github.com/j4mie/idiorm/pull/249)
 
 #### 2.0.0 - release 2015-12-02
 

@@ -28,6 +28,8 @@ class MockPDOStatement extends PDOStatement
    *
    * @param null|array $params
    *
+   * @return bool
+   *
    * @throws Exception
    */
   public function execute($params = null)
@@ -57,7 +59,10 @@ class MockPDOStatement extends PDOStatement
         }
       }
 
+      return true;
     }
+
+    return false;
   }
 
   /**

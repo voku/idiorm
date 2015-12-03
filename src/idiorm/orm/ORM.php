@@ -2896,6 +2896,10 @@ class ORM implements \ArrayAccess
   /**
    * Save any fields which have been modified on this object
    * to the database.
+   *
+   * @return bool
+   *
+   * @throws \Exception
    */
   public function save()
   {
@@ -2934,7 +2938,8 @@ class ORM implements \ArrayAccess
     }
 
     // If we've just inserted a new record, set the ID of this object
-    if ($this->_is_new) {
+    if ($success && $this->_is_new) {
+
       $this->_is_new = false;
       if ($this->count_null_id_columns() != 0) {
         $db = self::get_db($this->_connection_name);

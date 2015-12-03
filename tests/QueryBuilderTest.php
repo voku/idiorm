@@ -729,6 +729,7 @@ class QueryBuilderTest extends PHPUnit_Framework_TestCase
   {
     $record = ORM::for_table('widget')->use_id_column(array('id1', 'id2'))->create();
     $expected = "`id1`, `id2`";
+    // "_quote_identifier()" && "_get_id_column_name()" are protected ...
     $this->assertEquals($expected, $record->_quote_identifier($record->_get_id_column_name()));
   }
 
@@ -738,7 +739,7 @@ class QueryBuilderTest extends PHPUnit_Framework_TestCase
   public function testFindOneWithCompoundPrimaryKey()
   {
     $record = ORM::for_table('widget')->use_id_column(array('id1', 'id2'));
-    $record->findOne(array('id1' => 10, 'name' => 'Joe', 'id2' => 20));
+    $record->find_one(array('id1' => 10, 'name' => 'Joe', 'id2' => 20));
     $expected = "SELECT * FROM `widget` WHERE `id1` = '10' AND `id2` = '20' LIMIT 1";
     $this->assertEquals($expected, ORM::get_last_query());
   }
@@ -757,13 +758,26 @@ class QueryBuilderTest extends PHPUnit_Framework_TestCase
   public function testUpdateWithCompoundPrimaryKey()
   {
     $record = ORM::for_table('widget')->use_id_column(array('id1', 'id2'))->create();
+    // INSERT: false
+    $result = $record->save();
+    $this->assertFalse($result);
+    $expected = "INSERT INTO `widget` () VALUES ()";
+    $this->assertEquals($expected, ORM::get_last_query());
+
+    // INSERT: true
     $record->set('id1', 10);
     $record->set('id2', 20);
-    $record->set('name', 'Joe');
-    $record->save();
+    $record->set('name', 'test');
+    $result = $record->save();
+    $this->assertTrue($result);
+    $expected = "INSERT INTO `widget` (`id1`, `id2`, `name`) VALUES ('10', '20', 'test')";
+    $this->assertEquals($expected, ORM::get_last_query());
+
+    // UPDATE: true
     $record->set('name', 'John');
     $record->save();
     $expected = "UPDATE `widget` SET `name` = 'John' WHERE `id1` = '10' AND `id2` = '20'";
+    $this->assertTrue($result);
     $this->assertEquals($expected, ORM::get_last_query());
   }
 
