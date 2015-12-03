@@ -77,6 +77,8 @@ foreach ($tweets as $tweet) {
 Changelog
 ---------
 
+* fixed ORM::__callStatic()
+
 #### 2.1.0 - release 2015-12-03
 
 * fixed for ORM->is_dirty() [[tentwofour](https://github.com/tentwofour)] - [pr #268](https://github.com/j4mie/idiorm/pull/268)
