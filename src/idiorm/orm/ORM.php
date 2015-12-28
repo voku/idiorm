@@ -1799,7 +1799,7 @@ class ORM implements \ArrayAccess
     }
     $query[] = "))";
 
-    return $this->where_raw(join($query, ' '), $data);
+    return $this->where_raw(implode($query, ' '), $data);
   }
 
   /**
@@ -2354,7 +2354,7 @@ class ORM implements \ArrayAccess
   protected function _build_select_start()
   {
     $fragment = 'SELECT ';
-    $result_columns = join(', ', $this->_result_columns);
+    $result_columns = implode(', ', $this->_result_columns);
 
     if (!is_null($this->_limit) &&
         static::$_config[$this->_connection_name]['limit_clause_style'] === ORM::LIMIT_STYLE_TOP_N
@@ -2384,7 +2384,7 @@ class ORM implements \ArrayAccess
       return '';
     }
 
-    return join(" ", $this->_join_sources);
+    return implode(" ", $this->_join_sources);
   }
 
   /**
@@ -2412,7 +2412,7 @@ class ORM implements \ArrayAccess
       return '';
     }
 
-    return "GROUP BY " . join(", ", $this->_group_by);
+    return "GROUP BY " . implode(", ", $this->_group_by);
   }
 
   /**
@@ -2436,7 +2436,7 @@ class ORM implements \ArrayAccess
       $this->_values = array_merge($this->_values, $condition[static::CONDITION_VALUES]);
     }
 
-    return strtoupper($type) . " " . join(" AND ", $conditions);
+    return strtoupper($type) . " " . implode(" AND ", $conditions);
   }
 
   /**
@@ -2449,7 +2449,7 @@ class ORM implements \ArrayAccess
     }
 
     // TODO: "Database queries should use parameter binding" !!!
-    return "ORDER BY " . join(", ", $this->_order_by);
+    return "ORDER BY " . implode(", ", $this->_order_by);
   }
 
   /**
@@ -2519,7 +2519,7 @@ class ORM implements \ArrayAccess
       }
     }
 
-    return join($glue, $filtered_pieces);
+    return implode($glue, $filtered_pieces);
   }
 
   /**
@@ -2536,7 +2536,7 @@ class ORM implements \ArrayAccess
     $parts = explode('.', $identifier);
     $parts = array_map(array($this, '_quote_identifier_part'), $parts);
 
-    return join('.', $parts);
+    return implode('.', $parts);
   }
 
   /**
@@ -2554,7 +2554,7 @@ class ORM implements \ArrayAccess
     if (is_array($identifier)) {
       $result = array_map(array($this, '_quote_one_identifier'), $identifier);
 
-      return join(', ', $result);
+      return implode(', ', $result);
     } else {
       return $this->_quote_one_identifier($identifier);
     }
@@ -2611,7 +2611,7 @@ class ORM implements \ArrayAccess
           )
       );
     }
-    $parameter_string = join(',', $parameters);
+    $parameter_string = implode(',', $parameters);
     $key = $query . ':' . $parameter_string;
 
     return sha1($key);
@@ -3053,10 +3053,10 @@ class ORM implements \ArrayAccess
       $field_list[] = "{$this->_quote_identifier($key)} = $value";
     }
 
-    $query[] = join(", ", $field_list);
+    $query[] = implode(", ", $field_list);
     $this->_add_id_column_conditions($query);
 
-    return join(" ", $query);
+    return implode(" ", $query);
   }
 
   /**
@@ -3067,7 +3067,7 @@ class ORM implements \ArrayAccess
     $query[] = "INSERT INTO";
     $query[] = $this->_quote_identifier($this->_table_name);
     $field_list = array_map(array($this, '_quote_identifier'), array_keys($this->_dirty_fields));
-    $query[] = "(" . join(", ", $field_list) . ")";
+    $query[] = "(" . implode(", ", $field_list) . ")";
     $query[] = "VALUES";
 
     $placeholders = $this->_create_placeholders($this->_dirty_fields);
@@ -3077,7 +3077,7 @@ class ORM implements \ArrayAccess
       $query[] = 'RETURNING ' . $this->_quote_identifier($this->_get_id_column_name());
     }
 
-    return join(" ", $query);
+    return implode(" ", $query);
   }
 
   /**
@@ -3092,7 +3092,7 @@ class ORM implements \ArrayAccess
     $this->_add_id_column_conditions($query);
 
     return static::_execute(
-        join(" ", $query), is_array($this->id(true)) ?
+        implode(" ", $query), is_array($this->id(true)) ?
         array_values($this->id(true)) :
         array($this->id(true)), $this->_connection_name
     );
