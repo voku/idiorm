@@ -33,8 +33,8 @@ class MultipleConnectionTest extends PHPUnit_Framework_TestCase
 
   public function testRawExecuteOverAlternateConnection()
   {
-    $expected = "SELECT * FROM `foo`";
-    ORM::raw_execute("SELECT * FROM `foo`", array(), self::ALTERNATE);
+    $expected = 'SELECT * FROM `foo`';
+    ORM::raw_execute('SELECT * FROM `foo`', array(), self::ALTERNATE);
 
     $this->assertEquals($expected, ORM::get_last_query(self::ALTERNATE));
   }
@@ -49,11 +49,11 @@ class MultipleConnectionTest extends PHPUnit_Framework_TestCase
     $statementOne = ORM::get_last_statement(); // get_statement is *not* per connection
     $this->assertInstanceOf('MockDifferentPDOStatement', $statementOne);
 
-    $expected = "SELECT * FROM `widget` LIMIT 1";
+    $expected = 'SELECT * FROM `widget` LIMIT 1';
     $this->assertNotEquals($expected, ORM::get_last_query()); // Because get_last_query() is across *all* connections
     $this->assertEquals($expected, ORM::get_last_query(ORM::DEFAULT_CONNECTION));
 
-    $expectedToo = "SELECT * FROM `person` LIMIT 1";
+    $expectedToo = 'SELECT * FROM `person` LIMIT 1';
     $this->assertEquals($expectedToo, ORM::get_last_query(self::ALTERNATE));
   }
 

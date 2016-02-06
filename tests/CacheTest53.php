@@ -88,7 +88,7 @@ class CacheTest53 extends PHPUnit_Framework_TestCase
     }
 
     $new = ORM::for_table('widget')->create();
-    $new->name = "Joe";
+    $new->name = 'Joe';
     $new->age = 25;
     $saved = $new->save();
     $this->assertTrue($saved);
