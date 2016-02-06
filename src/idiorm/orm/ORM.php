@@ -52,8 +52,8 @@ class ORM implements \ArrayAccess
   const DEFAULT_CONNECTION = 'default';
 
   // Limit clause style
-  const LIMIT_STYLE_TOP_N = "top";
-  const LIMIT_STYLE_LIMIT = "limit";
+  const LIMIT_STYLE_TOP_N = 'top';
+  const LIMIT_STYLE_LIMIT = 'limit';
 
   // ------------------------ //
   // --- CLASS PROPERTIES --- //
@@ -509,9 +509,9 @@ class ORM implements \ArrayAccess
       case 'sqlsrv':
       case 'dblib':
       case 'mssql':
-        return ORM::LIMIT_STYLE_TOP_N;
+        return self::LIMIT_STYLE_TOP_N;
       default:
-        return ORM::LIMIT_STYLE_LIMIT;
+        return self::LIMIT_STYLE_LIMIT;
     }
   }
 
@@ -588,9 +588,9 @@ class ORM implements \ArrayAccess
 
         if (is_null($param)) {
           $type = \PDO::PARAM_NULL;
-        } else if (is_bool($param)) {
+        } elseif (is_bool($param)) {
           $type = \PDO::PARAM_BOOL;
-        } else if (is_int($param)) {
+        } elseif (is_int($param)) {
           $type = \PDO::PARAM_INT;
         } else {
           $type = \PDO::PARAM_STR;
@@ -649,13 +649,13 @@ class ORM implements \ArrayAccess
       $parameters = array_map(array(static::get_db($connection_name), 'quote'), $parameters);
 
       // Avoid %format collision for vsprintf
-      $query = str_replace("%", "%%", $query);
+      $query = str_replace('%', '%%', $query);
 
       // Replace placeholders in the query for vsprintf
       if (false !== strpos($query, "'") || false !== strpos($query, '"')) {
-        $query = IdiormString::str_replace_outside_quotes("?", "%s", $query);
+        $query = IdiormString::str_replace_outside_quotes('?', '%s', $query);
       } else {
-        $query = str_replace("?", "%s", $query);
+        $query = str_replace('?', '%s', $query);
       }
 
       // Replace the question marks in the query with the parameters
@@ -1067,7 +1067,7 @@ class ORM implements \ArrayAccess
   protected function _add_result_column($expr, $alias = null)
   {
     if (!is_null($alias)) {
-      $expr .= " AS " . $this->_quote_identifier($alias);
+      $expr .= ' AS ' . $this->_quote_identifier($alias);
     }
 
     if ($this->_using_default_result_columns) {
@@ -1326,7 +1326,7 @@ class ORM implements \ArrayAccess
    */
   public function join($table, $constraint, $table_alias = null)
   {
-    return $this->_add_join_source("", $table, $constraint, $table_alias);
+    return $this->_add_join_source('', $table, $constraint, $table_alias);
   }
 
   /**
@@ -1341,7 +1341,7 @@ class ORM implements \ArrayAccess
    */
   public function inner_join($table, $constraint, $table_alias = null)
   {
-    return $this->_add_join_source("INNER", $table, $constraint, $table_alias);
+    return $this->_add_join_source('INNER', $table, $constraint, $table_alias);
   }
 
   /**
@@ -1355,7 +1355,7 @@ class ORM implements \ArrayAccess
    */
   public function left_outer_join($table, $constraint, $table_alias = null)
   {
-    return $this->_add_join_source("LEFT OUTER", $table, $constraint, $table_alias);
+    return $this->_add_join_source('LEFT OUTER', $table, $constraint, $table_alias);
   }
 
   /**
@@ -1369,7 +1369,7 @@ class ORM implements \ArrayAccess
    */
   public function right_outer_join($table, $constraint, $table_alias = null)
   {
-    return $this->_add_join_source("RIGHT OUTER", $table, $constraint, $table_alias);
+    return $this->_add_join_source('RIGHT OUTER', $table, $constraint, $table_alias);
   }
 
   /**
@@ -1384,7 +1384,7 @@ class ORM implements \ArrayAccess
    */
   public function full_outer_join($table, $constraint, $table_alias = null)
   {
-    return $this->_add_join_source("FULL OUTER", $table, $constraint, $table_alias);
+    return $this->_add_join_source('FULL OUTER', $table, $constraint, $table_alias);
   }
 
   /**
@@ -1767,13 +1767,13 @@ class ORM implements \ArrayAccess
   public function where_any_is($values, $operator = '=')
   {
     $data = array();
-    $query = array("((");
+    $query = array('((');
     $first = true;
     foreach ($values as $item) {
       if ($first) {
         $first = false;
       } else {
-        $query[] = ") OR (";
+        $query[] = ') OR (';
       }
       $firstsub = true;
 
@@ -1789,15 +1789,15 @@ class ORM implements \ArrayAccess
         if ($firstsub) {
           $firstsub = false;
         } else {
-          $query[] = "AND";
+          $query[] = 'AND';
         }
 
         $query[] = $this->_quote_identifier($key);
         $data[] = $subItem;
-        $query[] = $op . " ?";
+        $query[] = $op . ' ?';
       }
     }
-    $query[] = "))";
+    $query[] = '))';
 
     return $this->where_raw(implode($query, ' '), $data);
   }
@@ -1934,7 +1934,7 @@ class ORM implements \ArrayAccess
    */
   public function where_null($column_name)
   {
-    return $this->_add_where_no_value($column_name, "IS NULL");
+    return $this->_add_where_no_value($column_name, 'IS NULL');
   }
 
   /**
@@ -1946,7 +1946,7 @@ class ORM implements \ArrayAccess
    */
   public function where_not_null($column_name)
   {
-    return $this->_add_where_no_value($column_name, "IS NOT NULL");
+    return $this->_add_where_no_value($column_name, 'IS NOT NULL');
   }
 
   /**
@@ -2334,7 +2334,7 @@ class ORM implements \ArrayAccess
     // Build and return the full SELECT statement by concatenating
     // the results of calling each separate builder method.
     return $this->_join_if_not_empty(
-        " ",
+        ' ',
         array(
             $this->_build_select_start(),
             $this->_build_join(),
@@ -2357,7 +2357,7 @@ class ORM implements \ArrayAccess
     $result_columns = implode(', ', $this->_result_columns);
 
     if (!is_null($this->_limit) &&
-        static::$_config[$this->_connection_name]['limit_clause_style'] === ORM::LIMIT_STYLE_TOP_N
+        static::$_config[$this->_connection_name]['limit_clause_style'] === self::LIMIT_STYLE_TOP_N
     ) {
       $fragment .= "TOP {$this->_limit} ";
     }
@@ -2369,7 +2369,7 @@ class ORM implements \ArrayAccess
     $fragment .= "{$result_columns} FROM " . $this->_quote_identifier($this->_table_name);
 
     if (!is_null($this->_table_alias)) {
-      $fragment .= " " . $this->_quote_identifier($this->_table_alias);
+      $fragment .= ' ' . $this->_quote_identifier($this->_table_alias);
     }
 
     return $fragment;
@@ -2384,7 +2384,7 @@ class ORM implements \ArrayAccess
       return '';
     }
 
-    return implode(" ", $this->_join_sources);
+    return implode(' ', $this->_join_sources);
   }
 
   /**
@@ -2412,7 +2412,7 @@ class ORM implements \ArrayAccess
       return '';
     }
 
-    return "GROUP BY " . implode(", ", $this->_group_by);
+    return 'GROUP BY ' . implode(', ', $this->_group_by);
   }
 
   /**
@@ -2436,7 +2436,7 @@ class ORM implements \ArrayAccess
       $this->_values = array_merge($this->_values, $condition[static::CONDITION_VALUES]);
     }
 
-    return strtoupper($type) . " " . implode(" AND ", $conditions);
+    return strtoupper($type) . ' ' . implode(' AND ', $conditions);
   }
 
   /**
@@ -2449,7 +2449,7 @@ class ORM implements \ArrayAccess
     }
 
     // TODO: "Database queries should use parameter binding" !!!
-    return "ORDER BY " . implode(", ", $this->_order_by);
+    return 'ORDER BY ' . implode(', ', $this->_order_by);
   }
 
   /**
@@ -2463,7 +2463,7 @@ class ORM implements \ArrayAccess
     if (
         !is_null($this->_limit)
         &&
-        static::$_config[$this->_connection_name]['limit_clause_style'] == ORM::LIMIT_STYLE_LIMIT
+        static::$_config[$this->_connection_name]['limit_clause_style'] == self::LIMIT_STYLE_LIMIT
     ) {
       if (static::get_db($this->_connection_name)->getAttribute(\PDO::ATTR_DRIVER_NAME) == 'firebird') {
         $fragment = 'ROWS';
@@ -2837,7 +2837,7 @@ class ORM implements \ArrayAccess
             throw new \Exception('Primary key ID contains null value(s)');
           }
         }
-      } else if ($id === null) {
+      } elseif ($id === null) {
         throw new \Exception('Primary key ID missing from row or is null');
       }
     }
@@ -2898,7 +2898,7 @@ class ORM implements \ArrayAccess
       $this->_dirty_fields[$field] = $value;
       if (false === $expr && isset($this->_expr_fields[$field])) {
         unset($this->_expr_fields[$field]);
-      } else if (true === $expr) {
+      } elseif (true === $expr) {
         $this->_expr_fields[$field] = true;
       }
     }
@@ -3013,7 +3013,7 @@ class ORM implements \ArrayAccess
    */
   public function _add_id_column_conditions(&$query)
   {
-    $query[] = "WHERE";
+    $query[] = 'WHERE';
 
     if (is_array($this->_get_id_column_name())) {
       $keys = $this->_get_id_column_name();
@@ -3027,11 +3027,11 @@ class ORM implements \ArrayAccess
       if ($first) {
         $first = false;
       } else {
-        $query[] = "AND";
+        $query[] = 'AND';
       }
 
       $query[] = $this->_quote_identifier($key);
-      $query[] = "= ?";
+      $query[] = '= ?';
     }
   }
 
@@ -3053,10 +3053,10 @@ class ORM implements \ArrayAccess
       $field_list[] = "{$this->_quote_identifier($key)} = $value";
     }
 
-    $query[] = implode(", ", $field_list);
+    $query[] = implode(', ', $field_list);
     $this->_add_id_column_conditions($query);
 
-    return implode(" ", $query);
+    return implode(' ', $query);
   }
 
   /**
@@ -3064,11 +3064,11 @@ class ORM implements \ArrayAccess
    */
   protected function _build_insert()
   {
-    $query[] = "INSERT INTO";
+    $query[] = 'INSERT INTO';
     $query[] = $this->_quote_identifier($this->_table_name);
     $field_list = array_map(array($this, '_quote_identifier'), array_keys($this->_dirty_fields));
-    $query[] = "(" . implode(", ", $field_list) . ")";
-    $query[] = "VALUES";
+    $query[] = '(' . implode(', ', $field_list) . ')';
+    $query[] = 'VALUES';
 
     $placeholders = $this->_create_placeholders($this->_dirty_fields);
     $query[] = "({$placeholders})";
@@ -3077,7 +3077,7 @@ class ORM implements \ArrayAccess
       $query[] = 'RETURNING ' . $this->_quote_identifier($this->_get_id_column_name());
     }
 
-    return implode(" ", $query);
+    return implode(' ', $query);
   }
 
   /**
@@ -3086,13 +3086,13 @@ class ORM implements \ArrayAccess
   public function delete()
   {
     $query = array(
-        "DELETE FROM",
+        'DELETE FROM',
         $this->_quote_identifier($this->_table_name),
     );
     $this->_add_id_column_conditions($query);
 
     return static::_execute(
-        implode(" ", $query), is_array($this->id(true)) ?
+        implode(' ', $query), is_array($this->id(true)) ?
         array_values($this->id(true)) :
         array($this->id(true)), $this->_connection_name
     );
@@ -3106,9 +3106,9 @@ class ORM implements \ArrayAccess
     // Build and return the full DELETE statement by concatenating
     // the results of calling each separate builder method.
     $query = $this->_join_if_not_empty(
-        " ",
+        ' ',
         array(
-            "DELETE FROM",
+            'DELETE FROM',
             $this->_quote_identifier($this->_table_name),
             $this->_build_where(),
         )

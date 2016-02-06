@@ -106,7 +106,7 @@ class IdiormString
                 \z                          # Anchor to end of string.
                 /sx';
     if (!preg_match($re_valid, $this->subject)) {
-      throw new IdiormStringException("Subject string is not valid in the replace_outside_quotes context.");
+      throw new IdiormStringException('Subject string is not valid in the replace_outside_quotes context.');
     }
     $re_parse = '/
                 # Match one chunk of a valid string having embedded quoted substrings.

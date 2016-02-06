@@ -13,7 +13,7 @@ use idiorm\orm\ORM;
 
 // Require the idiorm file
 
-require_once("../vendor/autoload.php");
+require_once '../vendor/autoload.php';
 
 // Connect to the demo database file
 ORM::configure('sqlite:./demo.sqlite');
@@ -22,13 +22,13 @@ ORM::configure('sqlite:./demo.sqlite');
 // class and creates the table if it doesn't already exist.
 // Wouldn't normally be needed if the table is already there.
 $db = ORM::get_db();
-$sql = "
+$sql = '
 CREATE TABLE IF NOT EXISTS contact (
     id INTEGER PRIMARY KEY,
     name TEXT,
     email TEXT
 );
-";
+';
 $db->exec($sql);
 
 // Handle POST submission
