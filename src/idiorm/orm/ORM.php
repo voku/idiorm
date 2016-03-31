@@ -119,7 +119,7 @@ class ORM implements \ArrayAccess
   /**
    * Reference to previously used PDOStatement object to enable low-level access, if needed
    *
-   * @var null
+   * @var null|\PDOStatement
    */
   protected static $_last_statement = null;
 
@@ -214,14 +214,14 @@ class ORM implements \ArrayAccess
   /**
    * LIMIT
    *
-   * @var null
+   * @var null|int
    */
   protected $_limit = null;
 
   /**
    * OFFSET
    *
-   * @var null
+   * @var null|int
    */
   protected $_offset = null;
 
@@ -325,7 +325,7 @@ class ORM implements \ArrayAccess
         static::configure($conf_key, $conf_value, $connection_name);
       }
     } else {
-      if (is_null($value)) {
+      if (null === $value) {
         // Shortcut: If only one string argument is passed,
         // assume it's a connection string
         $value = $key;
@@ -338,8 +338,10 @@ class ORM implements \ArrayAccess
   /**
    * Retrieve configuration options by key, or as whole array.
    *
-   * @param string $key
-   * @param string $connection_name Which connection to use
+   * @param string|null $key
+   * @param string      $connection_name Which connection to use
+   *
+   * @return mixed
    */
   public static function get_config($key = null, $connection_name = self::DEFAULT_CONNECTION)
   {
@@ -426,7 +428,7 @@ class ORM implements \ArrayAccess
     static::_setup_db_config($connection_name);
     static::$_db[$connection_name] = $db;
 
-    if (!is_null(static::$_db[$connection_name])) {
+    if (null !== static::$_db[$connection_name]) {
       static::_setup_identifier_quote_character($connection_name);
       static::_setup_limit_clause_style($connection_name);
     }
@@ -450,7 +452,7 @@ class ORM implements \ArrayAccess
    */
   protected static function _setup_identifier_quote_character($connection_name)
   {
-    if (is_null(static::$_config[$connection_name]['identifier_quote_character'])) {
+    if (null === static::$_config[$connection_name]['identifier_quote_character']) {
       static::$_config[$connection_name]['identifier_quote_character'] = static::_detect_identifier_quote_character($connection_name);
     }
   }
@@ -464,7 +466,7 @@ class ORM implements \ArrayAccess
    */
   public static function _setup_limit_clause_style($connection_name)
   {
-    if (is_null(static::$_config[$connection_name]['limit_clause_style'])) {
+    if (null === static::$_config[$connection_name]['limit_clause_style']) {
       static::$_config[$connection_name]['limit_clause_style'] = static::_detect_limit_clause_style($connection_name);
     }
   }
@@ -586,7 +588,7 @@ class ORM implements \ArrayAccess
 
       foreach ($parameters as $key => &$param) {
 
-        if (is_null($param)) {
+        if (null === $param) {
           $type = \PDO::PARAM_NULL;
         } elseif (is_bool($param)) {
           $type = \PDO::PARAM_BOOL;
@@ -599,11 +601,12 @@ class ORM implements \ArrayAccess
         // TODO? -> ++$key OR $key, $param, $type ...
         $statement->bindParam(is_int($key) ? ++$key : $key, $param, $type);
       }
+      unset($param);
 
       $q = $statement->execute();
-      static::_log_query($query, $parameters, $connection_name, (microtime(true) - $time));
+      static::_log_query($query, $parameters, $connection_name, microtime(true) - $time);
     } catch (\Exception $ex) {
-      static::_log_query($query, $parameters, $connection_name, (microtime(true) - $time));
+      static::_log_query($query, $parameters, $connection_name, microtime(true) - $time);
       throw $ex;
     }
 
@@ -763,7 +766,7 @@ class ORM implements \ArrayAccess
   public function create($data = null)
   {
     $this->_is_new = true;
-    if (!is_null($data)) {
+    if (null !== $data) {
       return $this->hydrate($data)->force_all_dirty();
     }
 
@@ -821,7 +824,7 @@ class ORM implements \ArrayAccess
    */
   public function find_one($id = null)
   {
-    if (!is_null($id)) {
+    if (null !== $id) {
       $this->where_id_is($id);
     }
     $this->limit(1);
@@ -1066,7 +1069,7 @@ class ORM implements \ArrayAccess
    */
   protected function _add_result_column($expr, $alias = null)
   {
-    if (!is_null($alias)) {
+    if (null !== $alias) {
       $expr .= ' AS ' . $this->_quote_identifier($alias);
     }
 
@@ -1089,7 +1092,7 @@ class ORM implements \ArrayAccess
     if (is_array($this->_get_id_column_name())) {
       return count(array_filter($this->id(), 'is_null'));
     } else {
-      return is_null($this->id()) ? 1 : 0;
+      return (null === $this->id() ? 1 : 0);
     }
   }
 
@@ -1258,13 +1261,12 @@ class ORM implements \ArrayAccess
    */
   protected function _add_join_source($join_operator, $table, $constraint, $table_alias = null)
   {
-
     $join_operator = trim("{$join_operator} JOIN");
 
     $table = $this->_quote_identifier($table);
 
     // Add table alias if present
-    if (!is_null($table_alias)) {
+    if (null !== $table_alias) {
       $table_alias = $this->_quote_identifier($table_alias);
       $table .= " {$table_alias}";
     }
@@ -1295,7 +1297,7 @@ class ORM implements \ArrayAccess
   public function raw_join($table, $constraint, $table_alias, $parameters = array())
   {
     // Add table alias if present
-    if (!is_null($table_alias)) {
+    if (null !== $table_alias) {
       $table_alias = $this->_quote_identifier($table_alias);
       $table .= " {$table_alias}";
     }
@@ -1526,7 +1528,7 @@ class ORM implements \ArrayAccess
   /**
    * Add a WHERE clause with no parameters(like IS NULL and IS NOT NULL)
    *
-   * @param string $column_name
+   * @param string|array $column_name
    * @param string $operator
    *
    * @return ORM
@@ -1553,7 +1555,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $type
    * @param string $fragment
-   * @param array  $values
+   * @param mixed  $values
    *
    * @return $this
    */
@@ -1604,8 +1606,9 @@ class ORM implements \ArrayAccess
     foreach ($multiple as $key => $val) {
       // Add the table name in case of ambiguous columns
       if (count($result->_join_sources) > 0 && strpos($key, '.') === false) {
+        
         $table = $result->_table_name;
-        if (!is_null($result->_table_alias)) {
+        if (null !== $result->_table_alias) {
           $table = $result->_table_alias;
         }
 
@@ -1954,8 +1957,8 @@ class ORM implements \ArrayAccess
    * contain question mark placeholders, which will be bound
    * to the parameters supplied in the second argument.
    *
-   * @param       $clause
-   * @param array $parameters
+   * @param string $clause
+   * @param array  $parameters
    *
    * @return $this|ORM
    */
@@ -2283,8 +2286,8 @@ class ORM implements \ArrayAccess
    * contain question mark placeholders, which will be bound
    * to the parameters supplied in the second argument.
    *
-   * @param       $clause
-   * @param array $parameters
+   * @param string $clause
+   * @param array  $parameters
    *
    * @return $this|ORM
    */
@@ -2356,7 +2359,9 @@ class ORM implements \ArrayAccess
     $fragment = 'SELECT ';
     $result_columns = implode(', ', $this->_result_columns);
 
-    if (!is_null($this->_limit) &&
+    if (
+        null !== $this->_limit
+        &&
         static::$_config[$this->_connection_name]['limit_clause_style'] === self::LIMIT_STYLE_TOP_N
     ) {
       $fragment .= "TOP {$this->_limit} ";
@@ -2368,7 +2373,7 @@ class ORM implements \ArrayAccess
 
     $fragment .= "{$result_columns} FROM " . $this->_quote_identifier($this->_table_name);
 
-    if (!is_null($this->_table_alias)) {
+    if (null !== $this->_table_alias) {
       $fragment .= ' ' . $this->_quote_identifier($this->_table_alias);
     }
 
@@ -2433,6 +2438,7 @@ class ORM implements \ArrayAccess
     $conditions = array();
     foreach ($this->$conditions_class_property_name as $condition) {
       $conditions[] = $condition[static::CONDITION_FRAGMENT];
+      /** @noinspection SlowArrayOperationsInLoopInspection */
       $this->_values = array_merge($this->_values, $condition[static::CONDITION_VALUES]);
     }
 
@@ -2461,7 +2467,7 @@ class ORM implements \ArrayAccess
     $fragment = '';
 
     if (
-        !is_null($this->_limit)
+        null !== $this->_limit
         &&
         static::$_config[$this->_connection_name]['limit_clause_style'] == self::LIMIT_STYLE_LIMIT
     ) {
@@ -2484,7 +2490,7 @@ class ORM implements \ArrayAccess
    */
   protected function _build_offset()
   {
-    if (!is_null($this->_offset)) {
+    if (null !== $this->_offset) {
       $clause = 'OFFSET';
       if (static::get_db($this->_connection_name)->getAttribute(\PDO::ATTR_DRIVER_NAME) == 'firebird') {
         $clause = 'TO';
@@ -2807,9 +2813,10 @@ class ORM implements \ArrayAccess
    */
   protected function _get_id_column_name()
   {
-    if (!is_null($this->_instance_id_column)) {
+    if (null !== $this->_instance_id_column) {
       return $this->_instance_id_column;
     }
+
     if (isset(static::$_config[$this->_connection_name]['id_column_overrides'][$this->_table_name])) {
       return static::$_config[$this->_connection_name]['id_column_overrides'][$this->_table_name];
     }
@@ -2893,6 +2900,8 @@ class ORM implements \ArrayAccess
     if (!is_array($key)) {
       $key = array($key => $value);
     }
+
+    /** @noinspection SuspiciousLoopInspection */
     foreach ($key as $field => $value) {
       $this->_data[$field] = $value;
       $this->_dirty_fields[$field] = $value;
@@ -2947,7 +2956,11 @@ class ORM implements \ArrayAccess
       // UPDATE
 
       // If there are no dirty values, do nothing
-      if (empty($values) && empty($this->_expr_fields)) {
+      if (
+          empty($values)
+          &&
+          0 === count($this->_expr_fields)
+      ) {
         return true;
       }
 
@@ -3133,7 +3146,7 @@ class ORM implements \ArrayAccess
 
   public function offsetSet($key, $value)
   {
-    if (is_null($key)) {
+    if (null === $key) {
       throw new \InvalidArgumentException('You must specify a key/array index.');
     }
     $this->set($key, $value);
