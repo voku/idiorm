@@ -23,45 +23,45 @@ class ORMTest extends PHPUnit_Framework_TestCase
 
   public function testStaticAtrributes()
   {
-    $this->assertEquals('0', ORM::CONDITION_FRAGMENT);
-    $this->assertEquals('1', ORM::CONDITION_VALUES);
+    self::assertEquals('0', ORM::CONDITION_FRAGMENT);
+    self::assertEquals('1', ORM::CONDITION_VALUES);
   }
 
   public function testForTable()
   {
     $result = ORM::for_table('test');
-    $this->assertInstanceOf('idiorm\orm\ORM', $result);
+    self::assertInstanceOf('idiorm\orm\ORM', $result);
   }
 
   public function testCreate()
   {
     $model = ORM::for_table('test')->create();
-    $this->assertInstanceOf('idiorm\orm\ORM', $model);
-    $this->assertTrue($model->is_new());
+    self::assertInstanceOf('idiorm\orm\ORM', $model);
+    self::assertTrue($model->is_new());
   }
 
   public function testIsNew()
   {
     $model = ORM::for_table('test')->create();
-    $this->assertTrue($model->is_new());
+    self::assertTrue($model->is_new());
 
     $model = ORM::for_table('test')->create(array('test' => 'test'));
-    $this->assertTrue($model->is_new());
+    self::assertTrue($model->is_new());
   }
 
   public function testIsDirty()
   {
     $model = ORM::for_table('test')->create();
-    $this->assertFalse($model->is_dirty('test'));
+    self::assertFalse($model->is_dirty('test'));
 
     $model = ORM::for_table('test')->create(array('test' => 'test'));
-    $this->assertTrue($model->is_dirty('test'));
+    self::assertTrue($model->is_dirty('test'));
 
     $model->test = null;
-    $this->assertTrue($model->is_dirty('test'));
+    self::assertTrue($model->is_dirty('test'));
 
     $model->test = '';
-    $this->assertTrue($model->is_dirty('test'));
+    self::assertTrue($model->is_dirty('test'));
   }
 
   public function testArrayAccess()
@@ -69,17 +69,17 @@ class ORMTest extends PHPUnit_Framework_TestCase
     $value = 'test';
     $model = ORM::for_table('test')->create();
     $model['test'] = $value;
-    $this->assertTrue(isset($model['test']));
-    $this->assertEquals($model['test'], $value);
+    self::assertTrue(isset($model['test']));
+    self::assertEquals($model['test'], $value);
     unset($model['test']);
-    $this->assertFalse(isset($model['test']));
+    self::assertFalse(isset($model['test']));
   }
 
   public function testFindResultSet()
   {
     $result_set = ORM::for_table('test')->find_result_set();
-    $this->assertInstanceOf('idiorm\orm\IdiormResultSet', $result_set);
-    $this->assertSame(count($result_set), 5);
+    self::assertInstanceOf('idiorm\orm\IdiormResultSet', $result_set);
+    self::assertSame(count($result_set), 5);
   }
 
   public function testFindResultSetByDefault()
@@ -87,21 +87,21 @@ class ORMTest extends PHPUnit_Framework_TestCase
     ORM::configure('return_result_sets', true);
 
     $result_set = ORM::for_table('test')->find_many();
-    $this->assertInstanceOf('idiorm\orm\IdiormResultSet', $result_set);
-    $this->assertSame(count($result_set), 5);
+    self::assertInstanceOf('idiorm\orm\IdiormResultSet', $result_set);
+    self::assertSame(count($result_set), 5);
 
     ORM::configure('return_result_sets', false);
 
     $result_set = ORM::for_table('test')->find_many();
-    $this->assertInternalType('array', $result_set);
-    $this->assertSame(count($result_set), 5);
+    self::assertInternalType('array', $result_set);
+    self::assertSame(count($result_set), 5);
   }
 
   public function testGetLastPdoStatement()
   {
     ORM::for_table('widget')->where('name', 'Fred')->find_one();
     $statement = ORM::get_last_statement();
-    $this->assertInstanceOf('MockPDOStatement', $statement);
+    self::assertInstanceOf('MockPDOStatement', $statement);
   }
 
   /**
@@ -145,7 +145,7 @@ class ORMTest extends PHPUnit_Framework_TestCase
 
       throw new Exception('Test did not throw expected exception');
     } catch (Exception $e) {
-      $this->assertEquals($e->getMessage(), 'Primary key ID missing from row or is null');
+      self::assertEquals($e->getMessage(), 'Primary key ID missing from row or is null');
     }
   }
 
@@ -162,7 +162,7 @@ class ORMTest extends PHPUnit_Framework_TestCase
 
       throw new Exception('Test did not throw expected exception');
     } catch (Exception $e) {
-      $this->assertEquals($e->getMessage(), 'Primary key ID missing from row or is null');
+      self::assertEquals($e->getMessage(), 'Primary key ID missing from row or is null');
     }
   }
 
@@ -179,7 +179,7 @@ class ORMTest extends PHPUnit_Framework_TestCase
 
       throw new Exception('Test did not throw expected exception');
     } catch (Exception $e) {
-      $this->assertEquals($e->getMessage(), 'Primary key ID missing from row or is null');
+      self::assertEquals($e->getMessage(), 'Primary key ID missing from row or is null');
     }
   }
 
@@ -197,7 +197,14 @@ class ORMTest extends PHPUnit_Framework_TestCase
 
       throw new Exception('Test did not throw expected exception');
     } catch (Exception $e) {
-      $this->assertEquals($e->getMessage(), 'Primary key ID contains null value(s)');
+      self::assertEquals($e->getMessage(), 'Primary key ID contains null value(s)');
     }
+  }
+
+  public function testAsArray()
+  {
+    $model = ORM::for_table('test')->create(array('foo' => 1, 'bar' => 2));
+    self::assertEquals($model->as_array(), array('foo' => 1, 'bar' => 2));
+    self::assertEquals($model->as_array('foo'), array('foo' => 1));
   }
 }

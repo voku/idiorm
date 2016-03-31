@@ -48,13 +48,31 @@ class IdiormResultSet implements \Countable, \IteratorAggregate, \ArrayAccess, \
   }
 
   /**
-   * Get the current result set as an array
-   *
+   * Return the content of the result set
+   * as an array of associative arrays. Column
+   * names may optionally be supplied as arguments,
+   * if so, only those keys will be returned.
    * @return array
    */
-  public function as_array()
-  {
-    return $this->get_results();
+  public function as_array() {
+    $rows = array();
+    $args = func_get_args();
+
+    foreach($this->_results as $key => $row) {
+      if (
+          is_object($row)
+          &&
+          method_exists($row, 'as_array')
+          &&
+          is_callable(array($row, 'as_array'))
+      ) {
+        $rows[] = call_user_func_array(array($row, 'as_array'), $args);
+      } else {
+        $rows[$key] = $row;
+      }
+    }
+
+    return $rows;
   }
 
   /**

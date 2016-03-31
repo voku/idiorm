@@ -25,14 +25,14 @@ class IdiormResultSetTest extends PHPUnit_Framework_TestCase
   public function testGet()
   {
     $IdiormResultSet = new IdiormResultSet();
-    $this->assertInternalType('array', $IdiormResultSet->get_results());
+    self::assertInternalType('array', $IdiormResultSet->get_results());
   }
 
   public function testConstructor()
   {
     $result_set = array('item' => new stdClass);
     $IdiormResultSet = new IdiormResultSet($result_set);
-    $this->assertSame($IdiormResultSet->get_results(), $result_set);
+    self::assertSame($IdiormResultSet->get_results(), $result_set);
   }
 
   public function testSetResultsAndGetResults()
@@ -40,7 +40,7 @@ class IdiormResultSetTest extends PHPUnit_Framework_TestCase
     $result_set = array('item' => new stdClass);
     $IdiormResultSet = new IdiormResultSet();
     $IdiormResultSet->set_results($result_set);
-    $this->assertSame($IdiormResultSet->get_results(), $result_set);
+    self::assertSame($IdiormResultSet->get_results(), $result_set);
   }
 
   public function testAsArray()
@@ -48,22 +48,44 @@ class IdiormResultSetTest extends PHPUnit_Framework_TestCase
     $result_set = array('item' => new stdClass);
     $IdiormResultSet = new IdiormResultSet();
     $IdiormResultSet->set_results($result_set);
-    $this->assertSame($IdiormResultSet->as_array(), $result_set);
+    self::assertSame($IdiormResultSet->as_array(), $result_set);
+
+    // ---
+
+    $result_set = array(
+        'item'  => ORM::for_table('test')->create(array('foo' => 1, 'bar' => 2)),
+        'item2' => ORM::for_table('test')->create(array('foo' => 3, 'bar' => 4)),
+    );
+    $IdiormResultSet = new IdiormResultSet($result_set);
+    self::assertEquals(
+        $IdiormResultSet->as_array(),
+        array(
+            array('foo' => 1, 'bar' => 2),
+            array('foo' => 3, 'bar' => 4),
+        )
+    );
+    self::assertEquals(
+        $IdiormResultSet->as_array('foo'),
+        array(
+            array('foo' => 1),
+            array('foo' => 3),
+        )
+    );
   }
 
   public function testCount()
   {
     $result_set = array('item' => new stdClass);
     $IdiormResultSet = new IdiormResultSet($result_set);
-    $this->assertSame($IdiormResultSet->count(), 1);
-    $this->assertSame(count($IdiormResultSet), 1);
+    self::assertSame($IdiormResultSet->count(), 1);
+    self::assertSame(count($IdiormResultSet), 1);
   }
 
   public function testGetIterator()
   {
     $result_set = array('item' => new stdClass);
     $IdiormResultSet = new IdiormResultSet($result_set);
-    $this->assertInstanceOf('ArrayIterator', $IdiormResultSet->getIterator());
+    self::assertInstanceOf('ArrayIterator', $IdiormResultSet->getIterator());
   }
 
   public function testForeach()
@@ -74,21 +96,22 @@ class IdiormResultSetTest extends PHPUnit_Framework_TestCase
     foreach ($IdiormResultSet as $key => $record) {
       $return_array[$key] = $record;
     }
-    $this->assertSame($result_set, $return_array);
+    self::assertSame($result_set, $return_array);
   }
 
   public function testCallingMethods()
   {
     $result_set = array('item' => ORM::for_table('test'), 'item2' => ORM::for_table('test'));
     $IdiormResultSet = new IdiormResultSet($result_set);
+    /** @noinspection PhpUndefinedMethodInspection */
     $IdiormResultSet->set('field', 'value')->set('field2', 'value');
 
     foreach ($IdiormResultSet as $record) {
-      $this->assertTrue(isset($record->field));
-      $this->assertSame($record->field, 'value');
+      self::assertTrue(isset($record->field));
+      self::assertSame($record->field, 'value');
 
-      $this->assertTrue(isset($record->field2));
-      $this->assertSame($record->field2, 'value');
+      self::assertTrue(isset($record->field2));
+      self::assertSame($record->field2, 'value');
     }
   }
 
