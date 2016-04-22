@@ -598,7 +598,6 @@ class ORM implements \ArrayAccess
           $type = \PDO::PARAM_STR;
         }
 
-        // TODO? -> ++$key OR $key, $param, $type ...
         $statement->bindParam(is_int($key) ? ++$key : $key, $param, $type);
       }
       unset($param);
@@ -1529,7 +1528,7 @@ class ORM implements \ArrayAccess
    * Add a WHERE clause with no parameters(like IS NULL and IS NOT NULL)
    *
    * @param string|array $column_name
-   * @param string $operator
+   * @param string       $operator
    *
    * @return ORM
    */
@@ -1606,7 +1605,7 @@ class ORM implements \ArrayAccess
     foreach ($multiple as $key => $val) {
       // Add the table name in case of ambiguous columns
       if (count($result->_join_sources) > 0 && strpos($key, '.') === false) {
-        
+
         $table = $result->_table_name;
         if (null !== $result->_table_alias) {
           $table = $result->_table_alias;
@@ -1780,7 +1779,6 @@ class ORM implements \ArrayAccess
       }
       $firstsub = true;
 
-      // TODO? -> $item
       foreach ($item as $key => $subItem) {
 
         if (is_string($operator)) {
@@ -2454,8 +2452,9 @@ class ORM implements \ArrayAccess
       return '';
     }
 
-    // TODO: "Database queries should use parameter binding" !!!
-    return 'ORDER BY ' . implode(', ', $this->_order_by);
+    $db = static::get_db(self::DEFAULT_CONNECTION);
+
+    return 'ORDER BY ' . trim($db->quote(implode(', ', $this->_order_by)), "'");
   }
 
   /**
@@ -2584,10 +2583,7 @@ class ORM implements \ArrayAccess
     $quote_character = static::$_config[$this->_connection_name]['identifier_quote_character'];
 
     // double up any identifier quotes to escape them
-    return $quote_character .
-           str_replace(
-               $quote_character, $quote_character . $quote_character, $part
-           ) . $quote_character;
+    return $quote_character . str_replace($quote_character, $quote_character . $quote_character, $part) . $quote_character;
   }
 
   /**
