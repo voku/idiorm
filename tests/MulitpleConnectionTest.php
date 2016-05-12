@@ -26,9 +26,9 @@ class MultipleConnectionTest extends PHPUnit_Framework_TestCase
 
   public function testMultiplePdoConnections()
   {
-    $this->assertInstanceOf('MockPDO', ORM::get_db());
-    $this->assertInstanceOf('MockPDO', ORM::get_db(ORM::DEFAULT_CONNECTION));
-    $this->assertInstanceOf('MockDifferentPDO', ORM::get_db(self::ALTERNATE));
+    self::assertInstanceOf('MockPDO', ORM::get_db());
+    self::assertInstanceOf('MockPDO', ORM::get_db(ORM::DEFAULT_CONNECTION));
+    self::assertInstanceOf('MockDifferentPDO', ORM::get_db(self::ALTERNATE));
   }
 
   public function testRawExecuteOverAlternateConnection()
@@ -36,25 +36,25 @@ class MultipleConnectionTest extends PHPUnit_Framework_TestCase
     $expected = 'SELECT * FROM `foo`';
     ORM::raw_execute('SELECT * FROM `foo`', array(), self::ALTERNATE);
 
-    $this->assertEquals($expected, ORM::get_last_query(self::ALTERNATE));
+    self::assertEquals($expected, ORM::get_last_query(self::ALTERNATE));
   }
 
   public function testFindOneOverDifferentConnections()
   {
     ORM::for_table('widget')->find_one();
     $statementOne = ORM::get_last_statement();
-    $this->assertInstanceOf('MockPDOStatement', $statementOne);
+    self::assertInstanceOf('MockPDOStatement', $statementOne);
 
     ORM::for_table('person', self::ALTERNATE)->find_one();
     $statementOne = ORM::get_last_statement(); // get_statement is *not* per connection
-    $this->assertInstanceOf('MockDifferentPDOStatement', $statementOne);
+    self::assertInstanceOf('MockDifferentPDOStatement', $statementOne);
 
     $expected = 'SELECT * FROM `widget` LIMIT 1';
-    $this->assertNotEquals($expected, ORM::get_last_query()); // Because get_last_query() is across *all* connections
-    $this->assertEquals($expected, ORM::get_last_query(ORM::DEFAULT_CONNECTION));
+    self::assertNotEquals($expected, ORM::get_last_query()); // Because get_last_query() is across *all* connections
+    self::assertEquals($expected, ORM::get_last_query(ORM::DEFAULT_CONNECTION));
 
     $expectedToo = 'SELECT * FROM `person` LIMIT 1';
-    $this->assertEquals($expectedToo, ORM::get_last_query(self::ALTERNATE));
+    self::assertEquals($expectedToo, ORM::get_last_query(self::ALTERNATE));
   }
 
 }

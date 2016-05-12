@@ -42,7 +42,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
   {
     ORM::for_table('widget')->find_one(5);
     $expected = "SELECT * FROM `widget` WHERE `primary_key` = '5' LIMIT 1";
-    $this->assertEquals($expected, ORM::get_last_query());
+    self::assertEquals($expected, ORM::get_last_query());
   }
 
   public function testSettingIdColumnOverridesOne()
@@ -51,7 +51,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
     ORM::for_table('widget')->find_one(5);
     $expected = "SELECT * FROM `widget` WHERE `widget_id` = '5' LIMIT 1";
-    $this->assertEquals($expected, ORM::get_last_query());
+    self::assertEquals($expected, ORM::get_last_query());
 
     $this->tearDownIdColumnOverrides();
   }
@@ -62,7 +62,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
     ORM::for_table('widget_handle')->find_one(5);
     $expected = "SELECT * FROM `widget_handle` WHERE `widget_handle_id` = '5' LIMIT 1";
-    $this->assertEquals($expected, ORM::get_last_query());
+    self::assertEquals($expected, ORM::get_last_query());
 
     $this->tearDownIdColumnOverrides();
   }
@@ -73,7 +73,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
     ORM::for_table('widget_nozzle')->find_one(5);
     $expected = "SELECT * FROM `widget_nozzle` WHERE `primary_key` = '5' LIMIT 1";
-    $this->assertEquals($expected, ORM::get_last_query());
+    self::assertEquals($expected, ORM::get_last_query());
 
     $this->tearDownIdColumnOverrides();
   }
@@ -84,7 +84,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
     ORM::for_table('widget')->use_id_column('new_id')->find_one(5);
     $expected = "SELECT * FROM `widget` WHERE `new_id` = '5' LIMIT 1";
-    $this->assertEquals($expected, ORM::get_last_query());
+    self::assertEquals($expected, ORM::get_last_query());
 
     $this->tearDownIdColumnOverrides();
   }
@@ -95,7 +95,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
     ORM::for_table('widget_handle')->use_id_column('new_id')->find_one(5);
     $expected = "SELECT * FROM `widget_handle` WHERE `new_id` = '5' LIMIT 1";
-    $this->assertEquals($expected, ORM::get_last_query());
+    self::assertEquals($expected, ORM::get_last_query());
 
     $this->tearDownIdColumnOverrides();
   }
@@ -106,16 +106,16 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
     ORM::for_table('widget_nozzle')->use_id_column('new_id')->find_one(5);
     $expected = "SELECT * FROM `widget_nozzle` WHERE `new_id` = '5' LIMIT 1";
-    $this->assertEquals($expected, ORM::get_last_query());
+    self::assertEquals($expected, ORM::get_last_query());
 
     $this->tearDownIdColumnOverrides();
   }
 
   public function testGetConfig()
   {
-    $this->assertTrue(ORM::get_config('logging'));
+    self::assertTrue(ORM::get_config('logging'));
     ORM::configure('logging', false);
-    $this->assertFalse(ORM::get_config('logging'));
+    self::assertFalse(ORM::get_config('logging'));
     ORM::configure('logging', true);
   }
 
@@ -137,7 +137,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
         'return_result_sets'         => false,
         'limit_clause_style'         => 'limit',
     );
-    $this->assertEquals($expected, ORM::get_config());
+    self::assertEquals($expected, ORM::get_config());
   }
 
 }

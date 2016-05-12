@@ -33,7 +33,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
     ORM::for_table('widget')->where('name', 'Bob')->where('age', 42)->find_one();
     $expected = ORM::get_last_query();
     ORM::for_table('widget')->where('name', 'Fred')->where('age', 17)->find_one(); // this shouldn't run a query!
-    $this->assertEquals($expected, ORM::get_last_query());
+    self::assertEquals($expected, ORM::get_last_query());
   }
 
   public function testQueryGenerationOnlyOccursOnceWithMultipleConnections()
@@ -46,7 +46,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
        ->where('name', 'Steve')
        ->where('age', 80)
        ->find_one(); // this shouldn't run a query!
-    $this->assertEquals($expected, ORM::get_last_query(self::ALTERNATE));
+    self::assertEquals($expected, ORM::get_last_query(self::ALTERNATE));
   }
 
 }
