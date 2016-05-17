@@ -1349,14 +1349,14 @@ class ORM implements \ArrayAccess
    * Add an LEFT JOIN source to the query
    */
   public function left_join($table, $constraint, $table_alias = null) {
-    return $this->_add_join_source("LEFT", $table, $constraint, $table_alias);
+    return $this->_add_join_source('LEFT', $table, $constraint, $table_alias);
   }
         
   /**
    * Add an RIGHT JOIN source to the query
    */
   public function right_join($table, $constraint, $table_alias  = null) {
-    return $this->_add_join_source("RIGHT", $table, $constraint, $table_alias);
+    return $this->_add_join_source('RIGHT', $table, $constraint, $table_alias);
   }
 
   /**
