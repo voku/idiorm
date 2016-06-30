@@ -310,9 +310,9 @@ class ORM implements \ArrayAccess
    * you wish to configure, another shortcut is to pass an array
    * of settings (and omit the second argument).
    *
-   * @param string $key
-   * @param mixed  $value
-   * @param string $connection_name Which connection to use
+   * @param string|array $key
+   * @param mixed        $value
+   * @param string       $connection_name Which connection to use
    */
   public static function configure($key, $value = null, $connection_name = self::DEFAULT_CONNECTION)
   {
@@ -341,7 +341,7 @@ class ORM implements \ArrayAccess
    * @param string|null $key
    * @param string      $connection_name Which connection to use
    *
-   * @return mixed
+   * @return string|array
    */
   public static function get_config($key = null, $connection_name = self::DEFAULT_CONNECTION)
   {
@@ -370,7 +370,7 @@ class ORM implements \ArrayAccess
    * @param string $table_name
    * @param string $connection_name Which connection to use
    *
-   * @return ORM
+   * @return static
    */
   public static function for_table($table_name, $connection_name = self::DEFAULT_CONNECTION)
   {
@@ -758,7 +758,7 @@ class ORM implements \ArrayAccess
    * dirty so all will be saved to the database when
    * save() is called.
    *
-   * @param mixed $data
+   * @param null|array $data
    *
    * @return $this
    */
@@ -925,7 +925,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column
    *
-   * @return int
+   * @return int|float
    */
   public function min($column)
   {
@@ -938,7 +938,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column
    *
-   * @return int
+   * @return float
    */
   public function avg($column)
   {
@@ -951,7 +951,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column
    *
-   * @return int
+   * @return int|float
    */
   public function sum($column)
   {
@@ -964,7 +964,7 @@ class ORM implements \ArrayAccess
    * @param string $sql_function The aggregate function to call eg. MIN, COUNT, etc
    * @param string $column       The column to execute the aggregate query against
    *
-   * @return int
+   * @return float|int|mixed
    */
   protected function _call_aggregate_db_function($sql_function, $column)
   {
@@ -1013,6 +1013,8 @@ class ORM implements \ArrayAccess
   /**
    * Force the ORM to flag all the fields in the $data array
    * as "dirty" and therefore update them when save() is called.
+   *
+   * @return $this
    */
   public function force_all_dirty()
   {
@@ -1085,6 +1087,8 @@ class ORM implements \ArrayAccess
   /**
    * Counts the number of columns that belong to the primary
    * key and their value is null.
+   *
+   * @return int
    */
   public function count_null_id_columns()
   {
@@ -1221,6 +1225,8 @@ class ORM implements \ArrayAccess
 
   /**
    * Add a DISTINCT keyword before the list of columns in the SELECT query
+   *
+   * @return $this
    */
   public function distinct()
   {
@@ -1344,18 +1350,32 @@ class ORM implements \ArrayAccess
   {
     return $this->_add_join_source('INNER', $table, $constraint, $table_alias);
   }
-  
+
   /**
    * Add an LEFT JOIN source to the query
+   *
+   * @param string $table
+   * @param        $constraint
+   * @param null   $table_alias
+   *
+   * @return ORM
    */
-  public function left_join($table, $constraint, $table_alias = null) {
+  public function left_join($table, $constraint, $table_alias = null)
+  {
     return $this->_add_join_source('LEFT', $table, $constraint, $table_alias);
   }
-        
+
   /**
    * Add an RIGHT JOIN source to the query
+   *
+   * @param string $table
+   * @param        $constraint
+   * @param null   $table_alias
+   *
+   * @return ORM
    */
-  public function right_join($table, $constraint, $table_alias  = null) {
+  public function right_join($table, $constraint, $table_alias = null)
+  {
     return $this->_add_join_source('RIGHT', $table, $constraint, $table_alias);
   }
 
@@ -1366,7 +1386,7 @@ class ORM implements \ArrayAccess
    * @param string      $constraint
    * @param null|string $table_alias
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function left_outer_join($table, $constraint, $table_alias = null)
   {
@@ -1380,7 +1400,7 @@ class ORM implements \ArrayAccess
    * @param string      $constraint
    * @param null|string $table_alias
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function right_outer_join($table, $constraint, $table_alias = null)
   {
@@ -1424,7 +1444,7 @@ class ORM implements \ArrayAccess
    * @param string       $separator
    * @param mixed        $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   protected function _add_simple_having($column_name, $separator, $value)
   {
@@ -1504,7 +1524,7 @@ class ORM implements \ArrayAccess
    * @param string       $separator
    * @param mixed        $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   protected function _add_simple_where($column_name, $separator, $value)
   {
@@ -1604,7 +1624,7 @@ class ORM implements \ArrayAccess
    * @param string       $separator
    * @param string|int   $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   protected function _add_simple_condition($type, $column_name, $separator, $value)
   {
@@ -1712,7 +1732,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where($column_name, $value = null)
   {
@@ -1726,7 +1746,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_equal($column_name, $value = null)
   {
@@ -1739,7 +1759,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_not_equal($column_name, $value = null)
   {
@@ -1754,7 +1774,7 @@ class ORM implements \ArrayAccess
    *
    * @param mixed $id
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_id_is($id)
   {
@@ -1778,7 +1798,7 @@ class ORM implements \ArrayAccess
    * @param array  $values
    * @param string $operator
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_any_is($values, $operator = '=')
   {
@@ -1825,7 +1845,7 @@ class ORM implements \ArrayAccess
    *
    * @param mixed $ids
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_id_in($ids)
   {
@@ -1842,7 +1862,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_like($column_name, $value = null)
   {
@@ -1855,7 +1875,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_not_like($column_name, $value = null)
   {
@@ -1868,7 +1888,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_gt($column_name, $value = null)
   {
@@ -1881,7 +1901,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_lt($column_name, $value = null)
   {
@@ -1894,7 +1914,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_gte($column_name, $value = null)
   {
@@ -1907,7 +1927,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_lte($column_name, $value = null)
   {
@@ -1920,7 +1940,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $values
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_in($column_name, $values)
   {
@@ -1933,7 +1953,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $values
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_not_in($column_name, $values)
   {
@@ -1945,7 +1965,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column_name
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_null($column_name)
   {
@@ -1957,7 +1977,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column_name
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_not_null($column_name)
   {
@@ -1972,7 +1992,7 @@ class ORM implements \ArrayAccess
    * @param string $clause
    * @param array  $parameters
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function where_raw($clause, $parameters = array())
   {
@@ -2028,7 +2048,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column_name
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function order_by_desc($column_name)
   {
@@ -2040,7 +2060,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column_name
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function order_by_asc($column_name)
   {
@@ -2112,7 +2132,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param null   $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having($column_name, $value = null)
   {
@@ -2126,7 +2146,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param null   $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having_equal($column_name, $value = null)
   {
@@ -2139,7 +2159,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param null   $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having_not_equal($column_name, $value = null)
   {
@@ -2154,7 +2174,7 @@ class ORM implements \ArrayAccess
    *
    * @param $id
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having_id_is($id)
   {
@@ -2171,7 +2191,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having_like($column_name, $value = null)
   {
@@ -2184,7 +2204,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having_not_like($column_name, $value = null)
   {
@@ -2197,7 +2217,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having_gt($column_name, $value = null)
   {
@@ -2210,7 +2230,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having_lt($column_name, $value = null)
   {
@@ -2223,7 +2243,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having_gte($column_name, $value = null)
   {
@@ -2236,7 +2256,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having_lte($column_name, $value = null)
   {
@@ -2249,7 +2269,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $values
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having_in($column_name, $values = null)
   {
@@ -2262,7 +2282,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $values
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having_not_in($column_name, $values = null)
   {
@@ -2274,7 +2294,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column_name
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having_null($column_name)
   {
@@ -2286,7 +2306,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column_name
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having_not_null($column_name)
   {
@@ -2301,7 +2321,7 @@ class ORM implements \ArrayAccess
    * @param string $clause
    * @param array  $parameters
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function having_raw($clause, $parameters = array())
   {
@@ -2365,6 +2385,8 @@ class ORM implements \ArrayAccess
 
   /**
    * Build the start of the SELECT statement
+   *
+   * @return string
    */
   protected function _build_select_start()
   {
@@ -2394,6 +2416,8 @@ class ORM implements \ArrayAccess
 
   /**
    * Build the JOIN sources
+   *
+   * @return string
    */
   protected function _build_join()
   {
@@ -2406,6 +2430,8 @@ class ORM implements \ArrayAccess
 
   /**
    * Build the WHERE clause(s)
+   *
+   * @return string
    */
   protected function _build_where()
   {
@@ -2414,6 +2440,8 @@ class ORM implements \ArrayAccess
 
   /**
    * Build the HAVING clause(s)
+   *
+   * @return string
    */
   protected function _build_having()
   {
@@ -2422,6 +2450,8 @@ class ORM implements \ArrayAccess
 
   /**
    * Build GROUP BY
+   *
+   * @return string
    */
   protected function _build_group_by()
   {
@@ -2459,6 +2489,8 @@ class ORM implements \ArrayAccess
 
   /**
    * Build ORDER BY
+   *
+   * @return string
    */
   protected function _build_order_by()
   {
@@ -2473,6 +2505,8 @@ class ORM implements \ArrayAccess
 
   /**
    * Build LIMIT
+   *
+   * @return string
    */
   protected function _build_limit()
   {
@@ -2500,6 +2534,8 @@ class ORM implements \ArrayAccess
 
   /**
    * Build OFFSET
+   *
+   * @return string
    */
   protected function _build_offset()
   {
@@ -2872,7 +2908,7 @@ class ORM implements \ArrayAccess
    * @param mixed $key
    * @param mixed $value
    *
-   * @return $this|ORM
+   * @return ORM
    */
   public function set($key, $value = null)
   {
@@ -3060,6 +3096,8 @@ class ORM implements \ArrayAccess
 
   /**
    * Build an UPDATE query
+   *
+   * @return string
    */
   protected function _build_update()
   {
@@ -3084,6 +3122,8 @@ class ORM implements \ArrayAccess
 
   /**
    * Build an INSERT query
+   *
+   * @return string
    */
   protected function _build_insert()
   {
@@ -3105,6 +3145,8 @@ class ORM implements \ArrayAccess
 
   /**
    * Delete this record from the database
+   *
+   * @return bool
    */
   public function delete()
   {
@@ -3123,6 +3165,8 @@ class ORM implements \ArrayAccess
 
   /**
    * Delete many records from the database
+   *
+   * @return bool
    */
   public function delete_many()
   {
@@ -3144,16 +3188,30 @@ class ORM implements \ArrayAccess
   // ---  ArrayAccess  --- //
   // --------------------- //
 
+  /**
+   * @param mixed $key
+   *
+   * @return bool
+   */
   public function offsetExists($key)
   {
     return array_key_exists($key, $this->_data);
   }
 
+  /**
+   * @param mixed $key
+   *
+   * @return mixed
+   */
   public function offsetGet($key)
   {
     return $this->get($key);
   }
 
+  /**
+   * @param mixed $key
+   * @param mixed $value
+   */
   public function offsetSet($key, $value)
   {
     if (null === $key) {
@@ -3162,6 +3220,9 @@ class ORM implements \ArrayAccess
     $this->set($key, $value);
   }
 
+  /**
+   * @param mixed $key
+   */
   public function offsetUnset($key)
   {
     unset($this->_data[$key]);
@@ -3171,21 +3232,39 @@ class ORM implements \ArrayAccess
   // --------------------- //
   // --- MAGIC METHODS --- //
   // --------------------- //
+
+  /**
+   * @param $key
+   *
+   * @return mixed
+   */
   public function __get($key)
   {
     return $this->offsetGet($key);
   }
 
+  /**
+   * @param $key
+   * @param $value
+   */
   public function __set($key, $value)
   {
     $this->offsetSet($key, $value);
   }
 
+  /**
+   * @param $key
+   */
   public function __unset($key)
   {
     $this->offsetUnset($key);
   }
 
+  /**
+   * @param $key
+   *
+   * @return bool
+   */
   public function __isset($key)
   {
     return $this->offsetExists($key);
