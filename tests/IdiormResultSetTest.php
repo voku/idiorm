@@ -115,4 +115,19 @@ class IdiormResultSetTest extends PHPUnit_Framework_TestCase
     }
   }
 
+  public function testOffset() {
+    $ResultSet = new IdiormResultSet();
+    $ResultSet->offsetSet('item', new stdClass);
+    self::assertTrue($ResultSet->offsetExists('item'));
+    self::assertInstanceOf('stdClass', $ResultSet->offsetGet('item'));
+    $ResultSet->offsetUnset('item');
+    self::assertFalse($ResultSet->offsetExists('item'));
+  }
+
+  public function testSelialize() {
+    $result_set = ['item' => new stdClass];
+    $ResultSet = new IdiormResultSet($result_set);
+    $serial = $ResultSet->serialize();
+    self::assertEquals($result_set, $ResultSet->unserialize($serial));
+  }
 }
