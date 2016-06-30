@@ -3,6 +3,9 @@
 use idiorm\orm\IdiormResultSet;
 use idiorm\orm\ORM;
 
+/**
+ * Class IdiormResultSetTest
+ */
 class IdiormResultSetTest extends PHPUnit_Framework_TestCase
 {
 
@@ -73,6 +76,14 @@ class IdiormResultSetTest extends PHPUnit_Framework_TestCase
     );
   }
 
+  public function testAsJson()
+  {
+    $result_set = array('item' => new stdClass);
+    $ResultSet = new IdiormResultSet();
+    $ResultSet->set_results($result_set);
+    self::assertSame($ResultSet->as_json(), '{"item":{}}');
+  }
+
   public function testCount()
   {
     $result_set = array('item' => new stdClass);
@@ -115,7 +126,8 @@ class IdiormResultSetTest extends PHPUnit_Framework_TestCase
     }
   }
 
-  public function testOffset() {
+  public function testOffset()
+  {
     $ResultSet = new IdiormResultSet();
     $ResultSet->offsetSet('item', new stdClass);
     self::assertTrue($ResultSet->offsetExists('item'));
@@ -124,7 +136,8 @@ class IdiormResultSetTest extends PHPUnit_Framework_TestCase
     self::assertFalse($ResultSet->offsetExists('item'));
   }
 
-  public function testSelialize() {
+  public function testSelialize()
+  {
     $result_set = ['item' => new stdClass];
     $ResultSet = new IdiormResultSet($result_set);
     $serial = $ResultSet->serialize();

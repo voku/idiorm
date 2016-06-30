@@ -2,6 +2,9 @@
 
 use idiorm\orm\ORM;
 
+/**
+ * Class ORMTest
+ */
 class ORMTest extends PHPUnit_Framework_TestCase
 {
 
@@ -56,9 +59,9 @@ class ORMTest extends PHPUnit_Framework_TestCase
 
     $model = ORM::for_table('test')->create(array('test' => 'test'));
     self::assertTrue($model->is_dirty('test'));
-    
+
     $model = ORM::forTable('test')->create(array('test' => null));
-    $this->assertTrue($model->isDirty('test'));
+    self::assertTrue($model->isDirty('test'));
 
     $model->test = null;
     self::assertTrue($model->is_dirty('test'));
@@ -209,5 +212,14 @@ class ORMTest extends PHPUnit_Framework_TestCase
     $model = ORM::for_table('test')->create(array('foo' => 1, 'bar' => 2));
     self::assertEquals($model->as_array(), array('foo' => 1, 'bar' => 2));
     self::assertEquals($model->as_array('foo'), array('foo' => 1));
+
+    $model = ORM::for_table('test')->create(array('test' => 'test'));
+    self::assertSame($model->as_array(), array('test' => 'test'));
+  }
+
+  public function testAsJson()
+  {
+    $model = ORM::for_table('test')->create(array('test' => 'test'));
+    self::assertSame($model->as_json(), '{"test":"test"}');
   }
 }

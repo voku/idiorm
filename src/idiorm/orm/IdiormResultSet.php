@@ -52,13 +52,15 @@ class IdiormResultSet implements \Countable, \IteratorAggregate, \ArrayAccess, \
    * as an array of associative arrays. Column
    * names may optionally be supplied as arguments,
    * if so, only those keys will be returned.
+   *
    * @return array
    */
-  public function as_array() {
+  public function as_array()
+  {
     $rows = array();
     $args = func_get_args();
 
-    foreach($this->_results as $key => $row) {
+    foreach ($this->_results as $key => $row) {
       if (
           is_object($row)
           &&
@@ -73,6 +75,18 @@ class IdiormResultSet implements \Countable, \IteratorAggregate, \ArrayAccess, \
     }
 
     return $rows;
+  }
+
+  /**
+   * Get the current result set as an json
+   *
+   * @param int $options
+   *
+   * @return string
+   */
+  public function as_json($options = 0)
+  {
+    return json_encode($this->get_results(), $options);
   }
 
   /**
