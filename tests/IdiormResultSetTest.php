@@ -138,7 +138,7 @@ class IdiormResultSetTest extends PHPUnit_Framework_TestCase
 
   public function testSelialize()
   {
-    $result_set = ['item' => new stdClass];
+    $result_set = array('item' => new stdClass);
     $ResultSet = new IdiormResultSet($result_set);
     $serial = $ResultSet->serialize();
     self::assertEquals($result_set, $ResultSet->unserialize($serial));
