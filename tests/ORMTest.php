@@ -26,8 +26,8 @@ class ORMTest extends PHPUnit_Framework_TestCase
 
   public function testStaticAtrributes()
   {
-    self::assertEquals('0', ORM::CONDITION_FRAGMENT);
-    self::assertEquals('1', ORM::CONDITION_VALUES);
+    self::assertSame(0, ORM::CONDITION_FRAGMENT);
+    self::assertSame(1, ORM::CONDITION_VALUES);
   }
 
   public function testForTable()
@@ -76,7 +76,7 @@ class ORMTest extends PHPUnit_Framework_TestCase
     $model = ORM::for_table('test')->create();
     $model['test'] = $value;
     self::assertTrue(isset($model['test']));
-    self::assertEquals($model['test'], $value);
+    self::assertSame($model['test'], $value);
     unset($model['test']);
     self::assertFalse(isset($model['test']));
   }
@@ -151,7 +151,7 @@ class ORMTest extends PHPUnit_Framework_TestCase
 
       throw new Exception('Test did not throw expected exception');
     } catch (Exception $e) {
-      self::assertEquals($e->getMessage(), 'Primary key ID missing from row or is null');
+      self::assertSame($e->getMessage(), 'Primary key ID missing from row or is null');
     }
   }
 
@@ -168,7 +168,7 @@ class ORMTest extends PHPUnit_Framework_TestCase
 
       throw new Exception('Test did not throw expected exception');
     } catch (Exception $e) {
-      self::assertEquals($e->getMessage(), 'Primary key ID missing from row or is null');
+      self::assertSame($e->getMessage(), 'Primary key ID missing from row or is null');
     }
   }
 
@@ -185,7 +185,7 @@ class ORMTest extends PHPUnit_Framework_TestCase
 
       throw new Exception('Test did not throw expected exception');
     } catch (Exception $e) {
-      self::assertEquals($e->getMessage(), 'Primary key ID missing from row or is null');
+      self::assertSame($e->getMessage(), 'Primary key ID missing from row or is null');
     }
   }
 
@@ -203,15 +203,15 @@ class ORMTest extends PHPUnit_Framework_TestCase
 
       throw new Exception('Test did not throw expected exception');
     } catch (Exception $e) {
-      self::assertEquals($e->getMessage(), 'Primary key ID contains null value(s)');
+      self::assertSame($e->getMessage(), 'Primary key ID contains null value(s)');
     }
   }
 
   public function testAsArray()
   {
     $model = ORM::for_table('test')->create(array('foo' => 1, 'bar' => 2));
-    self::assertEquals($model->as_array(), array('foo' => 1, 'bar' => 2));
-    self::assertEquals($model->as_array('foo'), array('foo' => 1));
+    self::assertSame($model->as_array(), array('foo' => 1, 'bar' => 2));
+    self::assertSame($model->as_array('foo'), array('foo' => 1));
 
     $model = ORM::for_table('test')->create(array('test' => 'test'));
     self::assertSame($model->as_array(), array('test' => 'test'));

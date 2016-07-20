@@ -37,7 +37,7 @@ class ConfigTest53 extends PHPUnit_Framework_TestCase
     self::assertTrue(is_callable($function));
 
     $log_string = "UPDATE `widget` SET `added` = NOW() WHERE `id` = '1'";
-    self::assertEquals($log_string, $function($log_string));
+    self::assertSame($log_string, $function($log_string));
 
     ORM::configure('logger', null);
   }

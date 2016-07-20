@@ -60,14 +60,14 @@ class IdiormResultSetTest extends PHPUnit_Framework_TestCase
         'item2' => ORM::for_table('test')->create(array('foo' => 3, 'bar' => 4)),
     );
     $IdiormResultSet = new IdiormResultSet($result_set);
-    self::assertEquals(
+    self::assertSame(
         $IdiormResultSet->as_array(),
         array(
             array('foo' => 1, 'bar' => 2),
             array('foo' => 3, 'bar' => 4),
         )
     );
-    self::assertEquals(
+    self::assertSame(
         $IdiormResultSet->as_array('foo'),
         array(
             array('foo' => 1),

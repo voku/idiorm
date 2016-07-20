@@ -2796,6 +2796,7 @@ class ORM implements \ArrayAccess
     $statement = static::get_last_statement();
 
     $rows = array();
+    /** @noinspection PhpAssignmentInConditionInspection */
     while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
       $rows[] = $row;
     }

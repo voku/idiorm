@@ -28,14 +28,14 @@ class QueryBuilderMySqlTest extends PHPUnit_Framework_TestCase
   {
     ORM::for_table($this->tableName)->find_one();
     $expected = 'SELECT * FROM `' . $this->tableName . '` LIMIT 1';
-    self::assertEquals($expected, ORM::get_last_query());
+    self::assertSame($expected, ORM::get_last_query());
   }
 
   public function testLimit()
   {
     ORM::for_table($this->tableName)->limit(5)->find_many();
     $expected = 'SELECT * FROM `' . $this->tableName . '` LIMIT 5';
-    self::assertEquals($expected, ORM::get_last_query());
+    self::assertSame($expected, ORM::get_last_query());
   }
 
   public function testTransactionCommit()
@@ -69,17 +69,17 @@ class QueryBuilderMySqlTest extends PHPUnit_Framework_TestCase
     self::assertInstanceOf('idiorm\orm\ORM', $orm);
 
     $success =$orm->save();
-    self::assertEquals(true, $success);
+    self::assertSame(true, $success);
 
     ORM::get_db()->commit();
 
     $newPageId = $orm->id();
-    self::assertEquals($lastDataId + 1, $newPageId);
+    self::assertSame((string)($lastDataId + 1), $newPageId);
 
     $newData = ORM::for_table($this->tableName)->find_one($newPageId);
-    self::assertEquals($newPageId, $newData['page_id']);
-    self::assertEquals('tpl_new_中', $newData['page_template']);
-    self::assertEquals('lall', $newData['page_type']);
+    self::assertSame($newPageId, $newData['page_id']);
+    self::assertSame('tpl_new_中', $newData['page_template']);
+    self::assertSame('lall', $newData['page_type']);
   }
 
   public function testTransactionRollBack()
@@ -113,16 +113,16 @@ class QueryBuilderMySqlTest extends PHPUnit_Framework_TestCase
     self::assertInstanceOf('idiorm\orm\ORM', $orm);
 
     $success =$orm->save();
-    self::assertEquals(true, $success);
+    self::assertSame(true, $success);
 
     ORM::get_db()->rollBack(); // INFO: here we revert the changes ...
 
     $newPageId = $orm->id();
-    self::assertEquals($lastDataId + 1, $newPageId);
+    self::assertSame((string)($lastDataId + 1), $newPageId);
 
     $newData = ORM::for_table($this->tableName)->find_one($newPageId);
-    self::assertEquals(null, $newData['page_id']);
-    self::assertEquals(null, $newData['page_template']);
-    self::assertEquals(null, $newData['page_type']);
+    self::assertSame(null, $newData['page_id']);
+    self::assertSame(null, $newData['page_template']);
+    self::assertSame(null, $newData['page_type']);
   }
 }
