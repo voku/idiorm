@@ -2498,7 +2498,7 @@ class ORM implements \ArrayAccess
       return '';
     }
 
-    $db = static::get_db(self::DEFAULT_CONNECTION);
+    $db = static::get_db($this->_connection_name);
 
     return 'ORDER BY ' . trim($db->quote(implode(', ', $this->_order_by)), "'");
   }
