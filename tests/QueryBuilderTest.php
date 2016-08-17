@@ -105,6 +105,41 @@ class QueryBuilderTest extends PHPUnit_Framework_TestCase
     self::assertSame($expected, ORM::get_last_query());
   }
 
+  public function testWhereDate()
+  {
+    ORM::for_table('widget')->where_date_eq('created', '2016-06-06')->find_many();
+    $expected = "SELECT * FROM `widget` WHERE DATE(`created`) = '2016-06-06'";
+    self::assertSame($expected, ORM::get_last_query());
+  }
+
+  public function testWhereDateGt()
+  {
+    ORM::for_table('widget')->where_date_gt('created', '2016-06-06')->find_many();
+    $expected = "SELECT * FROM `widget` WHERE DATE(`created`) > '2016-06-06'";
+    self::assertSame($expected, ORM::get_last_query());
+  }
+
+  public function testWhereDateLt()
+  {
+    ORM::for_table('widget')->where_date_lt('created', '2016-06-06')->find_many();
+    $expected = "SELECT * FROM `widget` WHERE DATE(`created`) < '2016-06-06'";
+    self::assertSame($expected, ORM::get_last_query());
+  }
+
+  public function testWhereDateGe()
+  {
+    ORM::for_table('widget')->where_date_ge('created', '2016-06-06')->find_many();
+    $expected = "SELECT * FROM `widget` WHERE DATE(`created`) >= '2016-06-06'";
+    self::assertSame($expected, ORM::get_last_query());
+  }
+
+  public function testWhereDateLe()
+  {
+    ORM::for_table('widget')->where_date_le('created', '2016-06-06')->find_many();
+    $expected = "SELECT * FROM `widget` WHERE DATE(`created`) <= '2016-06-06'";
+    self::assertSame($expected, ORM::get_last_query());
+  }
+
   public function testWhereAnyIs()
   {
     ORM::for_table('widget')->where_any_is(
@@ -160,6 +195,13 @@ class QueryBuilderTest extends PHPUnit_Framework_TestCase
   {
     ORM::for_table('widget')->order_by_desc('name')->find_one();
     $expected = 'SELECT * FROM `widget` ORDER BY `name` DESC LIMIT 1';
+    self::assertSame($expected, ORM::get_last_query());
+  }
+
+  public function testOrderByRand()
+  {
+    ORM::for_table('widget')->order_by_rand()->find_one();
+    $expected = 'SELECT * FROM `widget` ORDER BY RAND() LIMIT 1';
     self::assertSame($expected, ORM::get_last_query());
   }
 

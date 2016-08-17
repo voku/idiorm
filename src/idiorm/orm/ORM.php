@@ -1655,6 +1655,41 @@ class ORM implements \ArrayAccess
   }
 
   /**
+   * Add a WHERE clause width DATE
+   *
+   * If column_name is an associative array, it will add a condition for each column
+   *
+   * @param string       $type
+   * @param string|array $column_name
+   * @param string       $separator
+   * @param string|int   $value
+   *
+   * @return ORM
+   */
+  protected function _add_date_condition($type, $column_name, $separator, $value)
+  {
+    $multiple = is_array($column_name) ? $column_name : array($column_name => $value);
+    $result = $this;
+
+    foreach ($multiple as $key => $val) {
+      // Add the table name in case of ambiguous columns
+      if (count($result->_join_sources) > 0 && strpos($key, '.') === false) {
+
+        $table = $result->_table_name;
+        if (!is_null($result->_table_alias)) {
+          $table = $result->_table_alias;
+        }
+
+        $key = "{$table}.{$key}";
+      }
+      $key = 'DATE(' . $result->_quote_identifier($key) . ')';
+      $result = $result->_add_condition($type, "{$key} {$separator} ?", $val);
+    }
+
+    return $result;
+  }
+
+  /**
    * Return a string containing the given number of question marks,
    * separated by commas. Eg "?, ?, ?"
    *
@@ -1961,7 +1996,63 @@ class ORM implements \ArrayAccess
   }
 
   /**
-   * Add a WHERE column IS NULL clause to your query
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return ORM
+   */
+  public function where_date_eq($column_name, $value = null)
+  {
+    return $this->_add_date_condition('where', $column_name, '=', $value);
+  }
+
+
+  /**
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return ORM
+   */
+  public function where_date_lt($column_name, $value = null)
+  {
+    return $this->_add_date_condition('where', $column_name, '<', $value);
+  }
+
+  /**
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return ORM
+   */
+  public function where_date_gt($column_name, $value = null)
+  {
+    return $this->_add_date_condition('where', $column_name, '>', $value);
+  }
+
+  /**
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return ORM
+   */
+  public function where_date_le($column_name, $value = null)
+  {
+    return $this->_add_date_condition('where', $column_name, '<=', $value);
+  }
+
+  /**
+   * @param string $column_name
+   * @param mixed  $value
+   *
+   * @return ORM
+   */
+  public function where_date_ge($column_name, $value = null)
+  {
+    return $this->_add_date_condition('where', $column_name, '>=', $value);
+  }
+
+  /**
+   * Add a WHERE column IS NULL clause to your query.
    *
    * @param string $column_name
    *
@@ -2053,6 +2144,16 @@ class ORM implements \ArrayAccess
   public function order_by_desc($column_name)
   {
     return $this->_add_order_by($column_name, 'DESC');
+  }
+
+  /**
+   * Add an ORDER BY RAND clause
+   */
+  public function order_by_rand()
+  {
+    $this->_order_by[] = 'RAND()';
+
+    return $this;
   }
 
   /**
