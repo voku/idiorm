@@ -2,6 +2,9 @@
 
 use idiorm\orm\ORM;
 
+/**
+ * Class CacheTest
+ */
 class CacheTest extends PHPUnit_Framework_TestCase
 {
 

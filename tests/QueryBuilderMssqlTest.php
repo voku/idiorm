@@ -2,6 +2,9 @@
 
 use idiorm\orm\ORM;
 
+/**
+ * Class QueryBuilderMssqlTest
+ */
 class QueryBuilderMssqlTest extends PHPUnit_Framework_TestCase
 {
 

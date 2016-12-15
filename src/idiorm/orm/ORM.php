@@ -797,7 +797,7 @@ class ORM implements \ArrayAccess
    *
    * @param array $row
    *
-   * @return ORM
+   * @return $this
    */
   protected function _create_instance_from_row($row)
   {
@@ -1107,7 +1107,7 @@ class ORM implements \ArrayAccess
    * @param string $column
    * @param mixed  $alias
    *
-   * @return ORM
+   * @return $this
    */
   public function select($column, $alias = null)
   {
@@ -1124,7 +1124,7 @@ class ORM implements \ArrayAccess
    * @param string $expr
    * @param mixed  $alias
    *
-   * @return ORM
+   * @return $this
    */
   public function select_expr($expr, $alias = null)
   {
@@ -1143,7 +1143,7 @@ class ORM implements \ArrayAccess
    * @example select_many('column', 'column2', 'column3');
    * @example select_many(array('column', 'column2', 'column3'), 'column4', 'column5');
    *
-   * @return ORM
+   * @return $this
    */
   public function select_many()
   {
@@ -1173,7 +1173,7 @@ class ORM implements \ArrayAccess
    * @example select_many_expr('column', 'column2', 'column3')
    * @example select_many_expr(array('column', 'column2', 'column3'), 'column4', 'column5')
    *
-   * @return ORM
+   * @return $this
    */
   public function select_many_expr()
   {
@@ -1329,7 +1329,7 @@ class ORM implements \ArrayAccess
    * @param string      $constraint
    * @param string|null $table_alias
    *
-   * @return ORM
+   * @return $this
    */
   public function join($table, $constraint, $table_alias = null)
   {
@@ -1344,7 +1344,7 @@ class ORM implements \ArrayAccess
    * @param string      $constraint
    * @param null|string $table_alias
    *
-   * @return ORM
+   * @return $this
    */
   public function inner_join($table, $constraint, $table_alias = null)
   {
@@ -1358,7 +1358,7 @@ class ORM implements \ArrayAccess
    * @param        $constraint
    * @param null   $table_alias
    *
-   * @return ORM
+   * @return $this
    */
   public function left_join($table, $constraint, $table_alias = null)
   {
@@ -1372,7 +1372,7 @@ class ORM implements \ArrayAccess
    * @param        $constraint
    * @param null   $table_alias
    *
-   * @return ORM
+   * @return $this
    */
   public function right_join($table, $constraint, $table_alias = null)
   {
@@ -1386,7 +1386,7 @@ class ORM implements \ArrayAccess
    * @param string      $constraint
    * @param null|string $table_alias
    *
-   * @return ORM
+   * @return $this
    */
   public function left_outer_join($table, $constraint, $table_alias = null)
   {
@@ -1400,7 +1400,7 @@ class ORM implements \ArrayAccess
    * @param string      $constraint
    * @param null|string $table_alias
    *
-   * @return ORM
+   * @return $this
    */
   public function right_outer_join($table, $constraint, $table_alias = null)
   {
@@ -1415,7 +1415,7 @@ class ORM implements \ArrayAccess
    * @param string      $constraint
    * @param null|string $table_alias
    *
-   * @return ORM
+   * @return $this
    */
   public function full_outer_join($table, $constraint, $table_alias = null)
   {
@@ -1429,7 +1429,7 @@ class ORM implements \ArrayAccess
    * @param string $fragment
    * @param array  $values
    *
-   * @return ORM
+   * @return $this
    */
   protected function _add_having($fragment, $values = array())
   {
@@ -1444,7 +1444,7 @@ class ORM implements \ArrayAccess
    * @param string       $separator
    * @param mixed        $value
    *
-   * @return ORM
+   * @return $this
    */
   protected function _add_simple_having($column_name, $separator, $value)
   {
@@ -1459,7 +1459,7 @@ class ORM implements \ArrayAccess
    * @param string       $separator
    * @param mixed        $values
    *
-   * @return ORM
+   * @return $this
    */
   public function _add_having_placeholder($column_name, $separator, $values)
   {
@@ -1485,7 +1485,7 @@ class ORM implements \ArrayAccess
    * @param string|array $column_name
    * @param string       $operator
    *
-   * @return ORM
+   * @return $this
    */
   public function _add_having_no_value($column_name, $operator)
   {
@@ -1510,7 +1510,7 @@ class ORM implements \ArrayAccess
    * @param string $fragment
    * @param array  $values
    *
-   * @return ORM
+   * @return $this
    */
   protected function _add_where($fragment, $values = array())
   {
@@ -1524,7 +1524,7 @@ class ORM implements \ArrayAccess
    * @param string       $separator
    * @param mixed        $value
    *
-   * @return ORM
+   * @return $this
    */
   protected function _add_simple_where($column_name, $separator, $value)
   {
@@ -1538,7 +1538,7 @@ class ORM implements \ArrayAccess
    * @param string       $separator
    * @param mixed        $values
    *
-   * @return ORM
+   * @return $this
    */
   public function _add_where_placeholder($column_name, $separator, $values)
   {
@@ -1564,7 +1564,7 @@ class ORM implements \ArrayAccess
    * @param string|array $column_name
    * @param string       $operator
    *
-   * @return ORM
+   * @return $this
    */
   public function _add_where_no_value($column_name, $operator)
   {
@@ -1624,7 +1624,7 @@ class ORM implements \ArrayAccess
    * @param string       $separator
    * @param string|int   $value
    *
-   * @return ORM
+   * @return $this
    */
   protected function _add_simple_condition($type, $column_name, $separator, $value)
   {
@@ -1664,7 +1664,7 @@ class ORM implements \ArrayAccess
    * @param string       $separator
    * @param string|int   $value
    *
-   * @return ORM
+   * @return $this
    */
   protected function _add_date_condition($type, $column_name, $separator, $value)
   {
@@ -1767,7 +1767,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function where($column_name, $value = null)
   {
@@ -1781,7 +1781,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function where_equal($column_name, $value = null)
   {
@@ -1794,7 +1794,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function where_not_equal($column_name, $value = null)
   {
@@ -1809,7 +1809,7 @@ class ORM implements \ArrayAccess
    *
    * @param mixed $id
    *
-   * @return ORM
+   * @return $this
    */
   public function where_id_is($id)
   {
@@ -1833,7 +1833,7 @@ class ORM implements \ArrayAccess
    * @param array  $values
    * @param string $operator
    *
-   * @return ORM
+   * @return $this
    */
   public function where_any_is($values, $operator = '=')
   {
@@ -1880,7 +1880,7 @@ class ORM implements \ArrayAccess
    *
    * @param mixed $ids
    *
-   * @return ORM
+   * @return $this
    */
   public function where_id_in($ids)
   {
@@ -1897,7 +1897,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function where_like($column_name, $value = null)
   {
@@ -1910,7 +1910,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function where_not_like($column_name, $value = null)
   {
@@ -1923,7 +1923,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function where_gt($column_name, $value = null)
   {
@@ -1936,7 +1936,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function where_lt($column_name, $value = null)
   {
@@ -1949,7 +1949,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function where_gte($column_name, $value = null)
   {
@@ -1962,7 +1962,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function where_lte($column_name, $value = null)
   {
@@ -1975,7 +1975,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $values
    *
-   * @return ORM
+   * @return $this
    */
   public function where_in($column_name, $values)
   {
@@ -1988,7 +1988,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $values
    *
-   * @return ORM
+   * @return $this
    */
   public function where_not_in($column_name, $values)
   {
@@ -1999,7 +1999,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function where_date_eq($column_name, $value = null)
   {
@@ -2011,7 +2011,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function where_date_lt($column_name, $value = null)
   {
@@ -2022,7 +2022,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function where_date_gt($column_name, $value = null)
   {
@@ -2033,7 +2033,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function where_date_le($column_name, $value = null)
   {
@@ -2044,7 +2044,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function where_date_ge($column_name, $value = null)
   {
@@ -2056,7 +2056,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column_name
    *
-   * @return ORM
+   * @return $this
    */
   public function where_null($column_name)
   {
@@ -2068,7 +2068,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column_name
    *
-   * @return ORM
+   * @return $this
    */
   public function where_not_null($column_name)
   {
@@ -2083,7 +2083,7 @@ class ORM implements \ArrayAccess
    * @param string $clause
    * @param array  $parameters
    *
-   * @return ORM
+   * @return $this
    */
   public function where_raw($clause, $parameters = array())
   {
@@ -2139,7 +2139,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column_name
    *
-   * @return ORM
+   * @return $this
    */
   public function order_by_desc($column_name)
   {
@@ -2161,7 +2161,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column_name
    *
-   * @return ORM
+   * @return $this
    */
   public function order_by_asc($column_name)
   {
@@ -2233,7 +2233,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param null   $value
    *
-   * @return ORM
+   * @return $this
    */
   public function having($column_name, $value = null)
   {
@@ -2247,7 +2247,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param null   $value
    *
-   * @return ORM
+   * @return $this
    */
   public function having_equal($column_name, $value = null)
   {
@@ -2260,7 +2260,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param null   $value
    *
-   * @return ORM
+   * @return $this
    */
   public function having_not_equal($column_name, $value = null)
   {
@@ -2275,7 +2275,7 @@ class ORM implements \ArrayAccess
    *
    * @param $id
    *
-   * @return ORM
+   * @return $this
    */
   public function having_id_is($id)
   {
@@ -2292,7 +2292,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function having_like($column_name, $value = null)
   {
@@ -2305,7 +2305,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function having_not_like($column_name, $value = null)
   {
@@ -2318,7 +2318,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function having_gt($column_name, $value = null)
   {
@@ -2331,7 +2331,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function having_lt($column_name, $value = null)
   {
@@ -2344,7 +2344,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function having_gte($column_name, $value = null)
   {
@@ -2357,7 +2357,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function having_lte($column_name, $value = null)
   {
@@ -2370,7 +2370,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $values
    *
-   * @return ORM
+   * @return $this
    */
   public function having_in($column_name, $values = null)
   {
@@ -2383,7 +2383,7 @@ class ORM implements \ArrayAccess
    * @param string $column_name
    * @param mixed  $values
    *
-   * @return ORM
+   * @return $this
    */
   public function having_not_in($column_name, $values = null)
   {
@@ -2395,7 +2395,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column_name
    *
-   * @return ORM
+   * @return $this
    */
   public function having_null($column_name)
   {
@@ -2407,7 +2407,7 @@ class ORM implements \ArrayAccess
    *
    * @param string $column_name
    *
-   * @return ORM
+   * @return $this
    */
   public function having_not_null($column_name)
   {
@@ -2422,7 +2422,7 @@ class ORM implements \ArrayAccess
    * @param string $clause
    * @param array  $parameters
    *
-   * @return ORM
+   * @return $this
    */
   public function having_raw($clause, $parameters = array())
   {
@@ -2432,7 +2432,7 @@ class ORM implements \ArrayAccess
   /**
    * Activate cache refreshing for current query
    *
-   * @return ORM
+   * @return $this
    */
   public function refreshCache()
   {
@@ -2444,7 +2444,7 @@ class ORM implements \ArrayAccess
   /**
    * Disable caching for current query
    *
-   * @return ORM
+   * @return $this
    */
   public function noCaching()
   {
@@ -3023,7 +3023,7 @@ class ORM implements \ArrayAccess
    * @param mixed $key
    * @param mixed $value
    *
-   * @return ORM
+   * @return $this
    */
   public function set($key, $value = null)
   {
@@ -3040,7 +3040,7 @@ class ORM implements \ArrayAccess
    * @param string|array $key
    * @param string|null  $value
    *
-   * @return ORM
+   * @return $this
    */
   public function set_expr($key, $value = null)
   {
@@ -3396,7 +3396,7 @@ class ORM implements \ArrayAccess
    * @param  string $name
    * @param  array  $arguments
    *
-   * @return ORM
+   * @return $this
    *
    * @throws IdiormMethodMissingException
    */
@@ -3422,7 +3422,7 @@ class ORM implements \ArrayAccess
    * @param  string $name
    * @param  array  $arguments
    *
-   * @return ORM
+   * @return $this
    */
   public static function __callStatic($name, $arguments)
   {

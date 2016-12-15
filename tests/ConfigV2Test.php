@@ -2,6 +2,9 @@
 
 use idiorm\orm\ORM;
 
+/**
+ * Class ConfigTest53
+ */
 class ConfigTest53 extends PHPUnit_Framework_TestCase
 {
 

@@ -2,6 +2,9 @@
 
 use idiorm\orm\ORM;
 
+/**
+ * Class QueryBuilderPsr1Test53
+ */
 class QueryBuilderPsr1Test53 extends PHPUnit_Framework_TestCase
 {
 

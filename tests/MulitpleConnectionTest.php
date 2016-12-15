@@ -2,6 +2,9 @@
 
 use idiorm\orm\ORM;
 
+/**
+ * Class MultipleConnectionTest
+ */
 class MultipleConnectionTest extends PHPUnit_Framework_TestCase
 {
 
