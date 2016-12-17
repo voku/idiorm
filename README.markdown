@@ -7,8 +7,8 @@ Idiorm
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/voku/idiorm/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/voku/idiorm/?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/3c6a803ad63c428c879241606af2726a)](https://www.codacy.com/app/voku/idiorm)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/d5f1d035-df77-4f36-86bb-d318c643525d/mini.png)](https://insight.sensiolabs.com/projects/d5f1d035-df77-4f36-86bb-d318c643525d)
-[![Latest Stable Version](https://poser.pugx.org/voku/idiorm/v/stable)](https://packagist.org/packages/voku/idiorm)
-[![Total Downloads](https://poser.pugx.org/voku/idiorm/downloads)](https://packagist.org/packages/voku/idiorm)
+[![Latest Stable Version](https://poser.pugx.org/voku/idiorm/v/stable)](https://packagist.org/packages/voku/idiorm) 
+[![Total Downloads](https://poser.pugx.org/voku/idiorm/downloads)](https://packagist.org/packages/voku/idiorm) 
 [![Latest Unstable Version](https://poser.pugx.org/voku/idiorm/v/unstable)](https://packagist.org/packages/voku/idiorm)
 [![PHP 7 ready](http://php7ready.timesplinter.ch/voku/idiorm/badge.svg)](https://travis-ci.org/voku/idiorm)
 [![License](https://poser.pugx.org/voku/idiorm/license)](https://packagist.org/packages/voku/idiorm)
@@ -83,7 +83,7 @@ Changelog
 
 * fixed ORM::__callStatic()
 
-#### 2.1.0 - release 2015-12-03
+#### 2.1.0 - released 2015-12-03
 
 * fixed for ORM->is_dirty() [[tentwofour](https://github.com/tentwofour)] - [pr #268](https://github.com/j4mie/idiorm/pull/268)
 * fixed ORM->is_new() [[nicolas-brousse](https://github.com/nicolas-brousse)] - [pr #249](https://github.com/j4mie/idiorm/pull/249)
@@ -92,13 +92,13 @@ Changelog
 * use static keywords instead of self [[maboiteaspam](https://github.com/maboiteaspam)] - [+](https://github.com/maboiteaspam/idiorm/commit/0aa9f4f1c16d22f39cc18a2d68461805e3b3d944)
 * use type-casting for limit and offset
 
-#### 2.0.0 - release 2015-12-02
+#### 2.0.0 - released 2015-12-02
 
 * added PSR-4 autoloader
 * added phpdocs
 * fixed missing variable in ORM::having_id_is()
 
-#### 1.5.1 - release 2014-06-23
+#### 1.5.1 - released 2014-06-23
 
 * Binding of named parameters was broken [[cainmi](https://github.com/cainmi)] - [issue #221](https://github.com/j4mie/idiorm/pull/221)
 

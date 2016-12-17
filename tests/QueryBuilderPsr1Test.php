@@ -318,6 +318,12 @@ class QueryBuilderPsr1Test53 extends PHPUnit_Framework_TestCase
     self::assertSame($expected, ORM::getLastQuery());
   }
 
+  public function testRawWhereClauseMultiples() {
+    ORM::for_table('widget')->where('age', 18)->where_raw('(`name` = ? OR `name` = ?)', array('Fred', 'Bob'))->where_raw('(`name` = ? OR `name` = ?)', array('Sarah', 'Jane'))->where('size', 'large')->find_many();
+    $expected = "SELECT * FROM `widget` WHERE `age` = '18' AND (`name` = 'Fred' OR `name` = 'Bob') AND (`name` = 'Sarah' OR `name` = 'Jane') AND `size` = 'large'";
+    $this->assertEquals($expected, ORM::get_last_query());
+  }
+
   public function testRawQuery()
   {
     ORM::forTable('widget')->rawQuery('SELECT `w`.* FROM `widget` w')->findMany();
