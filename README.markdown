@@ -7,7 +7,8 @@ Idiorm
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/voku/idiorm/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/voku/idiorm/?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/grade/3c6a803ad63c428c879241606af2726a)](https://www.codacy.com/app/voku/idiorm)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/d5f1d035-df77-4f36-86bb-d318c643525d/mini.png)](https://insight.sensiolabs.com/projects/d5f1d035-df77-4f36-86bb-d318c643525d)
-[![Latest Stable Version](https://poser.pugx.org/voku/idiorm/v/stable)](https://packagist.org/packages/voku/idiorm) 
+[![Latest Stable Version](https://poser.pugx.org/voku/idiorm/v/stable)](https://packagist.org/packages/voku/idiorm) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fvoku%2Fidiorm.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fvoku%2Fidiorm?ref=badge_shield)
+
 [![Total Downloads](https://poser.pugx.org/voku/idiorm/downloads)](https://packagist.org/packages/voku/idiorm) 
 [![Latest Unstable Version](https://poser.pugx.org/voku/idiorm/v/unstable)](https://packagist.org/packages/voku/idiorm)
 [![PHP 7 ready](http://php7ready.timesplinter.ch/voku/idiorm/badge.svg)](https://travis-ci.org/voku/idiorm)
@@ -210,3 +211,7 @@ Changelog
 #### 1.0.0 - released 2010-12-01
 
 * Initial release
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fvoku%2Fidiorm.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fvoku%2Fidiorm?ref=badge_large)
